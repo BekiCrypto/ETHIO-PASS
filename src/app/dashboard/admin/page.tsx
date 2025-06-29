@@ -59,11 +59,20 @@ export default function AdminPage() {
                                     <TableCell>{req.user}</TableCell>
                                     <TableCell>{req.type}</TableCell>
                                     <TableCell>
-                                        <Badge variant={
-                                            req.status === "Approved" ? "default" 
-                                            : req.status === "Pending" ? "secondary" 
-                                            : "destructive"
-                                        } className={req.status === 'Approved' ? 'bg-accent text-accent-foreground' : ''}>
+                                        <Badge
+                                            variant={
+                                                req.status === "Pending"
+                                                ? "secondary"
+                                                : req.status === "Rejected"
+                                                ? "destructive"
+                                                : "default"
+                                            }
+                                            className={
+                                                req.status === "Approved"
+                                                ? "bg-accent text-accent-foreground hover:bg-accent/90"
+                                                : undefined
+                                            }
+                                        >
                                             {req.status}
                                         </Badge>
                                     </TableCell>
