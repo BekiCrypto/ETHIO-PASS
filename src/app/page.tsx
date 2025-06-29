@@ -32,11 +32,10 @@ function FrontPagePromo() {
               <div className="flex items-center gap-4">
                 <div className="relative">
                   <Image
-                    src="https://placehold.co/80x80.png"
+                    src="/abiy_ahmed.png"
                     width={80}
                     height={80}
                     alt="Photo of Abiy Ahmed Ali"
-                    data-ai-hint="abiy ahmed"
                     className="rounded-full border-4 border-white shadow-md object-cover"
                   />
                   <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1 border-2 border-primary/10">
