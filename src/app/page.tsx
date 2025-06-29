@@ -32,7 +32,7 @@ function FrontPagePromo() {
               <div className="flex items-center gap-4">
                 <div className="relative">
                   <Image
-                    src="https://images.unsplash.com/photo-1619602092289-9818d3568971?q=80&w=80&h=80&fit=crop"
+                    src="https://placehold.co/80x80.png"
                     width={80}
                     height={80}
                     alt="Photo of Abiy Ahmed Ali"
