@@ -65,15 +65,16 @@ export default function DeveloperPage() {
 
              <Card>
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><ShieldCheck className="w-5 h-5"/> Enterprise Grade</CardTitle>
-                    <CardDescription>Built for security, reliability, and scale for mission-critical applications.</CardDescription>
+                    <CardTitle className="flex items-center gap-2"><ShieldCheck className="w-5 h-5"/> The Digital Governance Backbone</CardTitle>
+                    <CardDescription>Built for security, reliability, and scale for mission-critical integrations.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4 text-sm text-muted-foreground">
-                    <p>Aman ID is designed to meet the rigorous requirements of banks, telcos, and government institutions. Our platform provides:</p>
+                    <p>Aman ID is the foundational infrastructure for Ethiopia's digital future, engineered to meet the rigorous requirements of banks, telcos, and government institutions. Our platform provides:</p>
                     <ul className="list-disc pl-5 space-y-2">
-                        <li><span className="font-semibold text-foreground">High Availability:</span> Service Level Agreements (SLAs) to guarantee uptime for your critical operations.</li>
-                        <li><span className="font-semibold text-foreground">Dedicated Support:</span> Access to enterprise support channels for rapid issue resolution.</li>
-                        <li><span className="font-semibold text-foreground">Compliance Ready:</span> Auditable, secure, and designed to comply with local and international data protection regulations.</li>
+                        <li><span className="font-semibold text-foreground">National Scale:</span> A microservices architecture built for high availability and nationwide scalability.</li>
+                        <li><span className="font-semibold text-foreground">Enterprise Support:</span> Dedicated support channels and SLAs to guarantee uptime for your critical operations.</li>
+                        <li><span className="font-semibold text-foreground">Compliance & Trust:</span> Auditable, secure, and designed to comply with local and international data protection regulations.</li>
+                        <li><span className="font-semibold text-foreground">Interoperability:</span> A unified API that enables seamless data exchange between different ministries and sectors.</li>
                     </ul>
                 </CardContent>
             </Card>

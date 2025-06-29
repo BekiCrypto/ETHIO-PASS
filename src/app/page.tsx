@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, ScanSearch, UserCheck, ShieldCheck, FileText, Bot, Server } from 'lucide-react';
+import { ArrowRight, ScanSearch, UserCheck, Server, FileText, KeyRound, PenSquare } from 'lucide-react';
 import { AmanLogo } from '@/components/aman-logo';
 
 export default function Home() {
@@ -23,10 +23,10 @@ export default function Home() {
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center space-y-4">
               <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl font-headline">
-                Secure Digital Identity for Ethiopia
+                Unlocking Ethiopia's Digital Future, Together.
               </h1>
               <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                Aman ID provides a robust, scalable e-KYC platform with AI-powered verification for a unified digital identity ecosystem.
+                Aman ID is Ethiopia's national digital identity platform, providing citizens and residents with secure and seamless access to government and private services.
               </p>
               <Button size="lg" asChild>
                 <Link href="/dashboard/verify">
@@ -40,38 +40,38 @@ export default function Home() {
         <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-card">
           <div className="container px-4 md:px-6">
             <h2 className="text-3xl font-bold tracking-tighter text-center sm:text-4xl md:text-5xl mb-12 font-headline">
-              Platform Features
+              A Unified Platform for a Digital Ethiopia
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <FeatureCard
                 icon={<ScanSearch className="h-10 w-10 text-primary" />}
-                title="Advanced OCR Verification"
-                description="Effortlessly extract data from National IDs, passports, and driver's licenses with Amharic language support."
+                title="Unified Digital Identity"
+                description="Effortlessly create a unique, biometric-linked digital ID using national documents like IDs, passports, and driver's licenses."
               />
               <FeatureCard
                 icon={<UserCheck className="h-10 w-10 text-primary" />}
-                title="AI Liveness Check"
-                description="Prevent fraud with cutting-edge AI that ensures the user is a real, live person during selfie verification."
+                title="AI-Verified e-KYC"
+                description="Prevent fraud with cutting-edge facial recognition and liveness checks, enabling secure remote onboarding."
+              />
+               <FeatureCard
+                icon={<KeyRound className="h-10 w-10 text-primary" />}
+                title="Single Digital Access (SSO)"
+                description="One secure login to access multiple government portals, banking services, healthcare, and more."
               />
               <FeatureCard
-                icon={<ShieldCheck className="h-10 w-10 text-primary" />}
-                title="Robust Admin Panel"
-                description="Manage users, monitor verification requests, and view detailed audit logs and fraud alerts."
+                icon={<PenSquare className="h-10 w-10 text-primary" />}
+                title="Digital Signature"
+                description="Sign documents and contracts digitally with a legally recognized and secure electronic signature."
               />
               <FeatureCard
                 icon={<FileText className="h-10 w-10 text-primary" />}
                 title="Developer-Friendly API"
-                description="Integrate our services seamlessly with well-documented APIs, SDKs, and a dedicated developer portal."
-              />
-              <FeatureCard
-                icon={<Bot className="h-10 w-10 text-primary" />}
-                title="Biometric Matching"
-                description="Future-proof your verification with upcoming support for face and fingerprint biometric comparisons."
+                description="Integrate our services seamlessly with well-documented APIs and a dedicated developer portal for businesses."
               />
               <FeatureCard
                 icon={<Server className="h-10 w-10 text-primary" />}
-                title="Scalable Infrastructure"
-                description="Built on a modern microservices architecture to ensure reliability and scalability for enterprise needs."
+                title="Digital Governance Backbone"
+                description="Providing a secure and interoperable foundation for all public and private sector digital services."
               />
             </div>
           </div>
@@ -80,9 +80,9 @@ export default function Home() {
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
             <div className="space-y-3">
-              <h2 className="text-3xl font-bold tracking-tighter md:text-4xl font-headline">Ready to Secure Your Services?</h2>
+              <h2 className="text-3xl font-bold tracking-tighter md:text-4xl font-headline">Join Ethiopia's Digital Transformation</h2>
               <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl">
-                Join the forefront of digital identity in Ethiopia. Create an account to start verifying users today.
+                Create an account to experience the future of digital identity and help build a more connected Ethiopia.
               </p>
             </div>
             <div className="mx-auto w-full max-w-sm space-y-2">
