@@ -1,1 +1,5 @@
-// Flows will be imported for their side effects in this file.
+import { config } from 'dotenv';
+config();
+
+import '@/ai/flows/ethiopian-ocr-verification.ts';
+import '@/ai/flows/selfie-liveness-check.ts';
