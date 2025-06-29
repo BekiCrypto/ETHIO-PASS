@@ -35,7 +35,7 @@ export default function ApiDocsPage() {
         <h1 className="text-3xl font-bold font-headline">API Documentation</h1>
       </div>
       <p className="text-muted-foreground">
-        Integrate Aman ID's verification services into your applications using our RESTful API. Below is the OpenAPI 3.0 specification for our endpoints. You can use this specification with tools like Swagger UI or Postman to interact with the API.
+        Integrate Ethio Pass's verification services into your applications using our RESTful API. Below is the OpenAPI 3.0 specification for our endpoints. You can use this specification with tools like Swagger UI or Postman to interact with the API.
       </p>
       <Card>
         <CardHeader>

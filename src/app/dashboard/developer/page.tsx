@@ -20,7 +20,7 @@ const chartData = [
 ]
 
 export default function DeveloperPage() {
-    const [apiKey, setApiKey] = useState("aman_sk_test_************************");
+    const [apiKey, setApiKey] = useState("ep_sk_test_************************");
     const [showKey, setShowKey] = useState(false);
 
     return (
@@ -31,15 +31,15 @@ export default function DeveloperPage() {
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><KeyRound className="w-5 h-5"/> API Keys</CardTitle>
-                        <CardDescription>Manage your API keys for accessing Aman ID services.</CardDescription>
+                        <CardDescription>Manage your API keys for accessing Ethio Pass services.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="flex items-center gap-2">
-                            <Input value={showKey ? "aman_sk_test_aB1cD2eF3gH4iJ5kL6mN7oP8q" : apiKey} readOnly />
+                            <Input value={showKey ? "ep_sk_test_aB1cD2eF3gH4iJ5kL6mN7oP8q" : apiKey} readOnly />
                             <Button variant="ghost" size="icon" onClick={() => setShowKey(!showKey)}>
                                 {showKey ? <EyeOff className="w-4 h-4"/> : <Eye className="w-4 h-4"/>}
                             </Button>
-                            <Button variant="ghost" size="icon" onClick={() => navigator.clipboard.writeText("aman_sk_test_aB1cD2eF3gH4iJ5kL6mN7oP8q")}>
+                            <Button variant="ghost" size="icon" onClick={() => navigator.clipboard.writeText("ep_sk_test_aB1cD2eF3gH4iJ5kL6mN7oP8q")}>
                                 <Copy className="w-4 h-4"/>
                             </Button>
                         </div>
@@ -69,7 +69,7 @@ export default function DeveloperPage() {
                     <CardDescription>Built for security, reliability, and scale for mission-critical integrations.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4 text-sm text-muted-foreground">
-                    <p>Aman ID is the foundational infrastructure for Ethiopia's digital future, engineered to meet the rigorous requirements of banks, telcos, and government institutions. Our platform provides:</p>
+                    <p>Ethio Pass is the foundational infrastructure for Ethiopia's digital future, engineered to meet the rigorous requirements of banks, telcos, and government institutions. Our platform provides:</p>
                     <ul className="list-disc pl-5 space-y-2">
                         <li><span className="font-semibold text-foreground">National Scale:</span> A microservices architecture built for high availability and nationwide scalability.</li>
                         <li><span className="font-semibold text-foreground">Enterprise Support:</span> Dedicated support channels and SLAs to guarantee uptime for your critical operations.</li>
