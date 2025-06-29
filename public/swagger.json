@@ -1,0 +1,122 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Aman ID API",
+    "version": "1.0.0",
+    "description": "API for e-KYC verification services in Ethiopia, including OCR for identity documents and selfie liveness checks."
+  },
+  "servers": [
+    {
+      "url": "https://api.amanid.com/v1",
+      "description": "Production Server"
+    }
+  ],
+  "paths": {
+    "/verify/ocr": {
+      "post": {
+        "summary": "Ethiopian OCR Verification",
+        "description": "Submits a photo of an Ethiopian identity document (National ID, Passport, Driver's License) for Optical Character Recognition (OCR). The service extracts text data, including Amharic characters.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "photoDataUri": {
+                    "type": "string",
+                    "description": "A data URI of the document photo. Must include a MIME type and use Base64 encoding. Format: 'data:<mimetype>;base64,<encoded_data>'."
+                  }
+                },
+                "required": ["photoDataUri"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful OCR extraction.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "extractedData": {
+                      "type": "string",
+                      "description": "The extracted text from the document."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request - Invalid input." },
+          "500": { "description": "Server Error - OCR processing failed." }
+        },
+        "security": [
+          { "ApiKeyAuth": [] }
+        ]
+      }
+    },
+    "/verify/liveness": {
+      "post": {
+        "summary": "Selfie Liveness Check",
+        "description": "Analyzes a selfie to determine if it is of a live person, helping to prevent fraud from photos of photos, masks, or other spoofing attempts.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "photoDataUri": {
+                    "type": "string",
+                    "description": "A data URI of the selfie photo. Must include a MIME type and use Base64 encoding. Format: 'data:<mimetype>;base64,<encoded_data>'."
+                  }
+                },
+                "required": ["photoDataUri"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Liveness check successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "isLive": {
+                      "type": "boolean",
+                      "description": "True if the selfie is of a live person."
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "format": "float",
+                      "description": "The confidence score of the liveness detection (0.0 to 1.0)."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request - Invalid input." },
+          "500": { "description": "Server Error - Liveness check failed." }
+        },
+        "security": [
+          { "ApiKeyAuth": [] }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      }
+    }
+  }
+}

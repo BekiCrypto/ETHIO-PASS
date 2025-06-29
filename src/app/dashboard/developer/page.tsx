@@ -3,8 +3,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Copy, Eye, EyeOff, KeyRound, Book, BarChart3, ArrowRight } from "lucide-react";
+import { Copy, Eye, EyeOff, KeyRound, Book, BarChart3, ArrowRight, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend } from "recharts"
 import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
 
@@ -26,7 +27,7 @@ export default function DeveloperPage() {
         <div className="space-y-8">
             <h1 className="text-3xl font-bold font-headline">Developer Portal</h1>
             
-            <div className="grid gap-8 lg:grid-cols-2">
+            <div className="grid gap-8 md:grid-cols-2">
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><KeyRound className="w-5 h-5"/> API Keys</CardTitle>
@@ -48,19 +49,34 @@ export default function DeveloperPage() {
 
                 <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><Book className="w-5 h-5"/> Documentation</CardTitle>
+                        <CardTitle className="flex items-center gap-2"><Book className="w-5 h-5"/> API Documentation</CardTitle>
                         <CardDescription>Explore our comprehensive API documentation and guides.</CardDescription>
                     </CardHeader>
                     <CardContent className="flex flex-col items-start space-y-4">
-                        <p>Access detailed guides, endpoint references, and code samples to get started with your integration.</p>
+                        <p>Access our OpenAPI specification and endpoint references to get started with your integration.</p>
                         <Button variant="outline" asChild>
-                            <a href="#" target="_blank" rel="noopener noreferrer">
+                            <Link href="/dashboard/api-docs">
                                 View API Docs <ArrowRight className="ml-2 w-4 h-4" />
-                            </a>
+                            </Link>
                         </Button>
                     </CardContent>
                 </Card>
             </div>
+
+             <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><ShieldCheck className="w-5 h-5"/> Enterprise Grade</CardTitle>
+                    <CardDescription>Built for security, reliability, and scale for mission-critical applications.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4 text-sm text-muted-foreground">
+                    <p>Aman ID is designed to meet the rigorous requirements of banks, telcos, and government institutions. Our platform provides:</p>
+                    <ul className="list-disc pl-5 space-y-2">
+                        <li><span className="font-semibold text-foreground">High Availability:</span> Service Level Agreements (SLAs) to guarantee uptime for your critical operations.</li>
+                        <li><span className="font-semibold text-foreground">Dedicated Support:</span> Access to enterprise support channels for rapid issue resolution.</li>
+                        <li><span className="font-semibold text-foreground">Compliance Ready:</span> Auditable, secure, and designed to comply with local and international data protection regulations.</li>
+                    </ul>
+                </CardContent>
+            </Card>
 
             <Card>
                 <CardHeader>
