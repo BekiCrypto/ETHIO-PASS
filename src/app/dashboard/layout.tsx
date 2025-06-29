@@ -25,7 +25,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ScanLine, Shield, Code, User, LogOut, Settings } from 'lucide-react';
-import { AmanLogo } from '@/components/aman-logo';
+import { EthioPassLogo } from '@/components/aman-logo';
 import { getAuth, signOut } from 'firebase/auth';
 import { app } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
@@ -62,7 +62,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <div className="flex min-h-screen">
         <Sidebar>
           <SidebarHeader>
-            <AmanLogo />
+            <EthioPassLogo />
           </SidebarHeader>
           <SidebarContent>
             <SidebarMenu>

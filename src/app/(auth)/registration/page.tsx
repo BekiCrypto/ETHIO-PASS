@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { AmanLogo } from "@/components/aman-logo"
+import { EthioPassLogo } from "@/components/aman-logo"
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { app } from "@/firebase";
 import { useToast } from "@/hooks/use-toast";
@@ -52,7 +52,7 @@ export default function RegistrationPage() {
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
-        <AmanLogo />
+        <EthioPassLogo />
         <CardTitle className="text-2xl mt-4">Sign Up</CardTitle>
         <CardDescription>
           Enter your information to create an account

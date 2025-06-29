@@ -3,13 +3,13 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, UserPlus, ScanFace, KeyRound, ShieldCheck, FileText, Server } from 'lucide-react';
-import { AmanLogo } from '@/components/aman-logo';
+import { EthioPassLogo } from '@/components/aman-logo';
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <header className="px-4 lg:px-6 h-16 flex items-center bg-card shadow-sm z-10">
-        <AmanLogo />
+        <EthioPassLogo />
         <nav className="ml-auto flex gap-4 sm:gap-6">
           <Link href="/login" className="text-sm font-medium hover:underline underline-offset-4">
             Login
