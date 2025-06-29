@@ -2,8 +2,125 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, UserPlus, ScanFace, KeyRound, ShieldCheck, FileText, Server } from 'lucide-react';
+import { ArrowRight, UserPlus, ScanFace, KeyRound, ShieldCheck, FileText, Server, PenSquare, BadgeCheck, FilePlus2, QrCode, Home as HomeIcon, Bell, User as UserIcon, Check } from 'lucide-react';
 import { EthioPassLogo } from '@/components/aman-logo';
+
+
+function FrontPagePromo() {
+  return (
+    <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[10px] rounded-[2.5rem] h-[600px] w-[300px] shadow-xl">
+      <div className="w-[140px] h-[18px] bg-gray-800 top-0 rounded-b-[1rem] left-1/2 -translate-x-1/2 absolute"></div>
+      <div className="h-[32px] w-[3px] bg-gray-800 absolute -left-[13px] top-[72px] rounded-l-lg"></div>
+      <div className="h-[32px] w-[3px] bg-gray-800 absolute -left-[13px] top-[124px] rounded-l-lg"></div>
+      <div className="h-[46px] w-[3px] bg-gray-800 absolute -right-[13px] top-[142px] rounded-r-lg"></div>
+      <div className="rounded-[2rem] overflow-hidden w-full h-full bg-background">
+        <div className="bg-background px-2 pt-2 pb-4 h-full flex flex-col">
+          {/* App Screen Content */}
+          <div className="flex-grow flex flex-col gap-4 p-2">
+            
+            {/* Header */}
+            <div className="flex justify-between items-center text-xs text-muted-foreground">
+              <span>9:41</span>
+              <div className="flex items-center gap-1">
+                <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 1.00012C12.3333 3.33346 9.66667 3.33346 7 1.00012M11.5 1.00012C9.83333 2.50012 8.16667 2.50012 6.5 1.00012M4 1.00012C4.83333 1.50012 5.66667 1.50012 6.5 1.00012" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M2.5 4.50012C4.16667 3.00012 5.83333 3.00012 7.5 4.50012" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+                <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.6667 1H1.33333C0.596954 1 0 1.59695 0 2.33333V9.66667C0 10.403 0.596954 11 1.33333 11H14.6667C15.403 11 16 10.403 16 9.66667V2.33333C16 1.59695 15.403 1 14.6667 1Z" fill="currentColor"></path></svg>
+              </div>
+            </div>
+
+            {/* Profile Section */}
+            <div className="p-4 bg-primary/10 rounded-2xl relative">
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <Image
+                    src="https://placehold.co/80x80.png"
+                    width={80}
+                    height={80}
+                    alt="Profile Picture"
+                    data-ai-hint="ethiopian man"
+                    className="rounded-full border-4 border-white shadow-md"
+                  />
+                  <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1 border-2 border-primary/10">
+                    <Check className="h-4 w-4 text-white" />
+                  </div>
+                </div>
+                <div>
+                  <h2 className="font-bold text-lg text-foreground">Abebe Bikila</h2>
+                  <p className="text-sm text-green-600 font-medium">Verified Account</p>
+                </div>
+              </div>
+               <div className="absolute top-2 right-2 text-primary/70">
+                 <div className="flex items-center gap-1">
+                     <svg viewBox="0 0 24 24" className="h-8 w-8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g stroke="url(#ethio-gradient-fingerprint-promo)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M18.9 7a8 8 0 0 1 1.1 5v1a6 6 0 0 0 .8 3" />
+                            <path d="M8 11a4 4 0 0 1 8 0v1a10 10 0 0 0 2 6" />
+                            <path d="M12 11v2a14 14 0 0 0 2.5 8" />
+                            <path d="M8 15a18 18 0 0 0 1.8 6" />
+                            <path d="M4.9 19a22 22 0 0 1 -.9 -7v-1a8 8 0 0 1 12 -6.95" />
+                        </g>
+                         <defs>
+                          <linearGradient id="ethio-gradient-fingerprint-promo" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style={{ stopColor: '#078930' }} />
+                            <stop offset="50%" style={{ stopColor: '#FCDD09' }} />
+                            <stop offset="100%" style={{ stopColor: '#DA121A' }} />
+                          </linearGradient>
+                        </defs>
+                    </svg>
+                    <span className="font-bold text-sm">Ethio Pass</span>
+                 </div>
+               </div>
+              <div className="mt-4 flex justify-around text-xs text-muted-foreground">
+                <span className="flex items-center gap-1"><Check className="h-3 w-3 text-green-500" /> Signature: Verified</span>
+                <span className="flex items-center gap-1"><Check className="h-3 w-3 text-green-500" /> Document: Available</span>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="space-y-3">
+              <ActionItem icon={<PenSquare className="text-primary"/>} title="Sign Documents" />
+              <ActionItem icon={<BadgeCheck className="text-primary"/>} title="Verify Documents" />
+              <ActionItem icon={<FilePlus2 className="text-primary"/>} title="Add Documents" description="Add Documents to your Wallet" />
+              <ActionItem icon={<QrCode className="text-primary"/>} title="Scan QR Code" description="Scan QR code to open and validate" />
+            </div>
+            
+          </div>
+          {/* Bottom Nav */}
+          <div className="border-t border-border flex justify-around items-center p-2">
+            <NavItem icon={<HomeIcon className="text-primary"/>} label="Home" active />
+            <NavItem icon={<FileText className="text-muted-foreground"/>} label="Documents" />
+            <NavItem icon={<Bell className="text-muted-foreground"/>} label="Notifications" />
+            <NavItem icon={<UserIcon className="text-muted-foreground"/>} label="Profile" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ActionItem({ icon, title, description }: { icon: React.ReactNode, title: string, description?: string }) {
+  return (
+    <div className="bg-card p-3 rounded-lg shadow-sm flex items-center gap-4">
+      <div className="bg-primary/10 p-2 rounded-md">
+        {icon}
+      </div>
+      <div className="flex-grow">
+        <h3 className="font-semibold text-sm">{title}</h3>
+        {description && <p className="text-xs text-muted-foreground">{description}</p>}
+      </div>
+      <ArrowRight className="h-4 w-4 text-muted-foreground" />
+    </div>
+  )
+}
+
+function NavItem({ icon, label, active = false }: { icon: React.ReactNode, label: string, active?: boolean }) {
+  return (
+    <div className="flex flex-col items-center gap-1">
+      {icon}
+      <span className={`text-xs ${active ? 'text-primary font-bold' : 'text-muted-foreground'}`}>{label}</span>
+    </div>
+  )
+}
+
 
 export default function Home() {
   return (
@@ -40,14 +157,7 @@ export default function Home() {
                   </Button>
                 </div>
               </div>
-              <Image
-                src="https://placehold.co/600x600.png"
-                width="600"
-                height="600"
-                alt="Ethio Pass App"
-                data-ai-hint="phone app"
-                className="mx-auto aspect-square overflow-hidden rounded-xl object-cover"
-              />
+              <FrontPagePromo />
             </div>
           </div>
         </section>
