@@ -35,8 +35,8 @@ function FrontPagePromo() {
                     src="https://placehold.co/80x80.png"
                     width={80}
                     height={80}
-                    alt="Profile Picture"
-                    data-ai-hint="ethiopian man"
+                    alt="Photo of Abiy Ahmed Ali"
+                    data-ai-hint="abiy ahmed"
                     className="rounded-full border-4 border-white shadow-md"
                   />
                   <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1 border-2 border-primary/10">
@@ -44,7 +44,7 @@ function FrontPagePromo() {
                   </div>
                 </div>
                 <div>
-                  <h2 className="font-bold text-lg text-foreground">Abebe Bikila</h2>
+                  <h2 className="font-bold text-lg text-foreground">Abiy Ahmed Ali</h2>
                   <p className="text-sm text-green-600 font-medium">Verified Account</p>
                 </div>
               </div>
