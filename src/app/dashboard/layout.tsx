@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   SidebarProvider,
   Sidebar,
@@ -26,6 +26,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ScanLine, Shield, Code, User, LogOut, Settings } from 'lucide-react';
 import { AmanLogo } from '@/components/aman-logo';
+import { getAuth, signOut } from 'firebase/auth';
+import { app } from '@/firebase';
+import { useToast } from '@/hooks/use-toast';
 
 const navItems = [
   { href: '/dashboard/verify', label: 'Verify ID', icon: ScanLine, a11y: "Verify ID" },
@@ -35,6 +38,24 @@ const navItems = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { toast } = useToast();
+  const auth = getAuth(app);
+
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        router.push('/login');
+      })
+      .catch((error) => {
+        console.error("Error signing out:", error);
+        toast({
+          title: "Logout Failed",
+          description: error.message,
+          variant: "destructive"
+        })
+      });
+  };
 
   return (
     <SidebarProvider>
@@ -83,7 +104,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
                    <Avatar>
-                        <AvatarImage src="https://placehold.co/32x32.png" alt="User Avatar" />
+                        <AvatarImage src="https://placehold.co/32x32.png" alt="User Avatar" data-ai-hint="person" />
                         <AvatarFallback>AD</AvatarFallback>
                     </Avatar>
                 </Button>
@@ -100,7 +121,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   <span>Settings</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
                    <LogOut className="mr-2 h-4 w-4" />
                    <span>Logout</span>
                 </DropdownMenuItem>
