@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import {
   SidebarProvider,
   Sidebar,
@@ -24,9 +25,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ScanLine, Shield, Code, User, LogOut, Settings } from 'lucide-react';
+import { ScanLine, Shield, Code, User, LogOut, Settings, Loader2 } from 'lucide-react';
 import { EthioPassLogo } from '@/components/aman-logo';
-import { getAuth, signOut } from 'firebase/auth';
+import { getAuth, signOut, onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth';
 import { app } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
 
@@ -41,7 +42,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const router = useRouter();
   const { toast } = useToast();
   const auth = getAuth(app);
+  const [user, setUser] = useState<FirebaseUser | null>(null);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        setUser(null);
+        router.replace('/login');
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [auth, router]);
+  
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
@@ -56,6 +73,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         })
       });
   };
+
+  if (loading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <SidebarProvider>
