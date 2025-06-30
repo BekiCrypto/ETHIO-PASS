@@ -95,7 +95,7 @@ export default function DashboardHomePage() {
                     <CheckCircle className="h-5 w-5 text-primary"/>
                     <span>Signature: Qualified</span>
                 </div>
-                <Link href="#" className="flex items-center justify-between gap-2 text-muted-foreground">
+                <Link href="/dashboard/documents" className="flex items-center justify-between gap-2 text-muted-foreground">
                     <div className="flex items-center gap-2">
                         <XCircle className="h-5 w-5 text-destructive"/>
                         <span>Documents: N/A</span>
@@ -118,7 +118,7 @@ export default function DashboardHomePage() {
 
         {/* Action List */}
         <div className="mt-4 space-y-4">
-            <ActionListItem title="Add Documents" description="Request official documents from an issuer" href="#" icon={<FilePlus2 className="h-6 w-6 text-accent"/>} />
+            <ActionListItem title="Add Documents" description="Request official documents from an issuer" href="/dashboard/documents" icon={<FilePlus2 className="h-6 w-6 text-accent"/>} />
             <ActionListItem title="Scan QR Code" description="Use your camera to start document sharing" href="#" icon={<QrCode className="h-6 w-6 text-accent"/>} />
         </div>
         
