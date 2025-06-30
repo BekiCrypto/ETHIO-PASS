@@ -1,49 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Ethio Pass API Docs</title>
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.17.14/swagger-ui.css">
-  <style>
-    html {
-      box-sizing: border-box;
-      overflow: -moz-scrollbars-vertical;
-      overflow-y: scroll;
-    }
-    *,
-    *:before,
-    *:after {
-      box-sizing: inherit;
-    }
-    body {
-      margin: 0;
-      background: #fafafa;
-    }
-  </style>
-</head>
-<body>
-  <div id="swagger-ui"></div>
-  <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.17.14/swagger-ui-bundle.js" charset="UTF-8"> </script>
-  <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.17.14/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
-  <script>
-    window.onload = function() {
-      // Begin Swagger UI call region
-      const ui = SwaggerUIBundle({
-        url: "/swagger.json",
-        dom_id: '#swagger-ui',
-        deepLinking: true,
-        presets: [
-          SwaggerUIBundle.presets.apis,
-          SwaggerUIStandalonePreset
-        ],
-        plugins: [
-          SwaggerUIBundle.plugins.DownloadUrl
-        ],
-        layout: "StandaloneLayout"
-      })
-      // End Swagger UI call region
-      window.ui = ui
-    }
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ethio Pass API Documentation</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui.css"
+    />
+    <style>
+      html {
+        box-sizing: border-box;
+        overflow: -moz-scrollbars-vertical;
+        overflow-y: scroll;
+      }
+      *,
+      *:before,
+      *:after {
+        box-sizing: inherit;
+      }
+      body {
+        margin: 0;
+        background: #fafafa;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="swagger-ui"></div>
+    <script
+      src="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui-bundle.js"
+      charset="UTF-8"
+    ></script>
+    <script
+      src="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui-standalone-preset.js"
+      charset="UTF-8"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script>
+      window.onload = function () {
+        const spec = `
+openapi: 3.0.3
+info:
+  title: Ethio Pass API
+  description: |-
+    This is the official API documentation for Ethio Pass, the national digital identity platform for Ethiopia.
+    This API provides services for identity verification, liveness detection, and biometric matching.
+
+    ### Authentication
+
+    All API requests must be authenticated using an API key.
+    Include your API key in the \`Authorization\` header with the \`Bearer\` scheme.
+
+    \`\`\`
+    Authorization: Bearer YOUR_API_KEY
+    \`\`\`
+  version: 1.0.0
+servers:
+  - url: /api
+tags:
+  - name: Verification
+    description: Endpoints for user identity verification
+paths:
+  /verify-id:
+    post:
+      tags:
+        - Verification
+      summary: Verify an Ethiopian ID Document
+      description: |
+        Uploads an image of an Ethiopian National ID, passport, or driver's license and uses Optical Character Recognition (OCR) to extract the text from the document. This is the first step in the identity verification process.
+      operationId: verifyId
+      requestBody:
+        description: Image of the ID document to be verified.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyIdInput'
+        required: true
+      responses:
+        '200':
+          description: Successful OCR extraction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyIdOutput'
+        '400':
+          description: Bad Request - The request body is missing the required \`photoDataUri\` field.
+        '500':
+          description: Server Error - The verification process failed.
+      security:
+        - ApiKeyAuth: []
+  /liveness:
+    post:
+      tags:
+        - Verification
+      summary: Perform Selfie Liveness Check
+      description: |
+        Analyzes a selfie image to determine if it is of a live person or a spoofing attempt (e.g., a photo of a photo). This helps prevent fraud during the remote onboarding process.
+      operationId: checkLiveness
+      requestBody:
+        description: Selfie image to be analyzed.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LivenessInput'
+        required: true
+      responses:
+        '200':
+          description: Successful liveness check
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LivenessOutput'
+        '400':
+          description: Bad Request - The request body is missing the required \`photoDataUri\` field.
+        '500':
+          description: Server Error - The liveness check failed.
+      security:
+        - ApiKeyAuth: []
+  /match:
+    post:
+      tags:
+        - Verification
+      summary: Perform Biometric Face Match
+      description: |
+        Compares two images: one from an official ID document and one from a selfie, to determine if the person in the selfie is the same person as in the ID photo.
+      operationId: matchFaces
+      requestBody:
+        description: ID photo and selfie photo for comparison.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchInput'
+        required: true
+      responses:
+        '200':
+          description: Successful biometric match
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchOutput'
+        '400':
+          description: Bad Request - The request body is missing required fields.
+        '500':
+          description: Server Error - The biometric match failed.
+      security:
+        - ApiKeyAuth: []
+components:
+  schemas:
+    VerifyIdInput:
+      type: object
+      required:
+        - photoDataUri
+      properties:
+        photoDataUri:
+          type: string
+          format: byte
+          description: "A photo of an Ethiopian National ID, passport, or driver's license, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
+          example: "data:image/jpeg;base64,/9j/4AAQSkZJRg..."
+    VerifyIdOutput:
+      type: object
+      properties:
+        extractedData:
+          type: string
+          description: "The extracted data from the Ethiopian document, including Amharic text."
+          example: "ስም፡ አለሙ ከበደ\\nየተወለደበት ቀን፡ 1980-01-01"
+    LivenessInput:
+      type: object
+      required:
+        - photoDataUri
+      properties:
+        photoDataUri:
+          type: string
+          format: byte
+          description: "A selfie photo of a person, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
+          example: "data:image/jpeg;base64,/9j/4AAQSkZJRg..."
+    LivenessOutput:
+      type: object
+      properties:
+        isLive:
+          type: boolean
+          description: Whether the selfie is of a live person.
+          example: true
+        confidence:
+          type: number
+          format: float
+          description: The confidence level of the liveness detection (0-1).
+          example: 0.95
+    MatchInput:
+      type: object
+      required:
+        - idPhotoDataUri
+        - selfiePhotoDataUri
+      properties:
+        idPhotoDataUri:
+          type: string
+          format: byte
+          description: "A photo from an ID document, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
+          example: "data:image/jpeg;base64,/9j/4AAQSkZJRg..."
+        selfiePhotoDataUri:
+          type: string
+          format: byte
+          description: "A selfie photo, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
+          example: "data:image/jpeg;base64,/9j/4AAQSkZJRg..."
+    MatchOutput:
+      type: object
+      properties:
+        match:
+          type: boolean
+          description: Whether the two faces are a likely match.
+          example: true
+        confidence:
+          type: number
+          format: float
+          description: A confidence score (0-1) for the match determination.
+          example: 0.89
+        reasoning:
+          type: string
+          description: A brief explanation for the decision.
+          example: "The facial features, including eye spacing and nose structure, show a high degree of correlation between the two images."
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+`;
+
+        const ui = SwaggerUIBundle({
+          spec: jsyaml.load(spec),
+          dom_id: '#swagger-ui',
+          deepLinking: true,
+          presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+          plugins: [SwaggerUIBundle.plugins.DownloadUrl],
+          layout: 'StandaloneLayout',
+        });
+        window.ui = ui;
+      };
+    </script>
+  </body>
 </html>
