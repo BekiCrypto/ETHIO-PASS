@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { EthioPassLogo } from "@/components/aman-logo"
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
 import { app } from "@/firebase" 
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
@@ -73,6 +73,26 @@ export default function LoginPage() {
     }
   };
 
+  const handleGoogleLogin = () => {
+    setIsLoading(true);
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+        .then((result) => {
+            const user = result.user;
+            console.log("Successfully logged in with Google:", user);
+            router.push('/dashboard');
+        }).catch((error) => {
+            console.error("Error with Google login:", error);
+            toast({
+                title: "Google Login Failed",
+                description: error.message,
+                variant: "destructive"
+            })
+        }).finally(() => {
+            setIsLoading(false);
+        });
+  };
+
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
@@ -119,7 +139,7 @@ export default function LoginPage() {
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? <Loader2 className="animate-spin" /> : 'Login'}
             </Button>
-            <Button variant="outline" className="w-full" disabled={isLoading}>
+            <Button variant="outline" className="w-full" disabled={isLoading} onClick={handleGoogleLogin}>
               Login with Google
             </Button>
           </div>

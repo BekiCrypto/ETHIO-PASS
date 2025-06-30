@@ -4,7 +4,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ArrowRight, Check, CheckCircle, Star, PenLine, FilePlus2, QrCode, XCircle } from 'lucide-react';
+import { ArrowRight, Check, CheckCircle, Star, PenLine, FilePlus2, QrCode, XCircle, Loader2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { getAuth, onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth';
+import { app } from '@/firebase';
+
 
 function Action({ title, icon, href }: { title: string, icon: React.ReactNode, href: string }) {
     return (
@@ -39,6 +43,36 @@ function ActionListItem({ title, description, icon, href }: { title: string, des
 }
 
 export default function DashboardHomePage() {
+  const [user, setUser] = useState<FirebaseUser | null>(null);
+  const [loading, setLoading] = useState(true);
+  const auth = getAuth(app);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      }
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, [auth]);
+
+  if (loading) {
+    return (
+        <div className="flex h-64 items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+    );
+  }
+
+  if (!user) {
+    return (
+        <div className="flex h-64 items-center justify-center">
+            <p>Please log in to view the dashboard.</p>
+        </div>
+    )
+  }
+
   return (
     <div className="relative pb-24 sm:pb-0">
       {/* Curved background */}
@@ -52,11 +86,11 @@ export default function DashboardHomePage() {
               <div className="flex items-center gap-4">
                 <div className="relative">
                   <Image
-                    src="https://placehold.co/80x80.png"
+                    src={user.photoURL || "https://placehold.co/80x80.png"}
                     width={80}
                     height={80}
-                    alt="Bikila Daba Negeri"
-                    data-ai-hint="ethiopian man"
+                    alt={user.displayName || "User"}
+                    data-ai-hint="person"
                     className="rounded-full border-4 border-background shadow-md"
                   />
                   <div className="absolute -bottom-1 -right-1 bg-primary rounded-full p-1 border-2 border-background">
@@ -64,7 +98,7 @@ export default function DashboardHomePage() {
                   </div>
                 </div>
                 <div>
-                  <h1 className="font-bold text-lg tracking-wide">BIKILA DABA NEGERI</h1>
+                  <h1 className="font-bold text-lg tracking-wide">{user.displayName?.toUpperCase() || 'YOUR NAME'}</h1>
                   <p className="text-sm text-primary font-medium">Verified Account</p>
                 </div>
               </div>

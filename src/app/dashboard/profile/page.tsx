@@ -1,10 +1,13 @@
 'use client';
 
-import { ArrowLeft, RefreshCw, Pencil, CreditCard } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Pencil, CreditCard, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
+import { getAuth, onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth';
+import { app } from '@/firebase';
 
 function DetailItem({ label, value, editable = false }: { label: string, value: string, editable?: boolean }) {
   return (
@@ -24,7 +27,46 @@ function DetailItem({ label, value, editable = false }: { label: string, value: 
   );
 }
 
+const getInitials = (name?: string | null) => {
+  if (!name) return "U";
+  const parts = name.split(" ");
+  if (parts.length > 1 && parts[0] && parts[parts.length - 1]) {
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase();
+};
+
 export default function ProfilePage() {
+  const [user, setUser] = useState<FirebaseUser | null>(null);
+  const [loading, setLoading] = useState(true);
+  const auth = getAuth(app);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        if (currentUser) {
+            setUser(currentUser);
+        }
+        setLoading(false);
+    });
+    return () => unsubscribe();
+  }, [auth]);
+
+  if (loading) {
+    return (
+      <div className="flex h-64 items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="flex h-64 items-center justify-center text-center">
+        <p>Could not load user profile. Please try logging in again.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6 bg-muted/30 p-4 sm:rounded-lg">
       <div className="flex items-center gap-4">
@@ -51,12 +93,12 @@ export default function ProfilePage() {
       <Card>
         <CardContent className="p-4 flex items-center gap-4">
           <Avatar className="h-16 w-16">
-            <AvatarImage src="https://placehold.co/80x80.png" alt="Bikila Daba Negeri" data-ai-hint="ethiopian man" />
-            <AvatarFallback>BN</AvatarFallback>
+            <AvatarImage src={user.photoURL || "https://placehold.co/80x80.png"} alt={user.displayName || "User"} data-ai-hint="person" />
+            <AvatarFallback>{getInitials(user.displayName)}</AvatarFallback>
           </Avatar>
           <div>
-            <p className="font-bold text-lg tracking-wider">BIKILA DABA NEGERI</p>
-            <p className="text-muted-foreground text-sm font-mono">784198094733189</p>
+            <p className="font-bold text-lg tracking-wider">{user.displayName?.toUpperCase() || 'USER NAME'}</p>
+            <p className="text-muted-foreground text-sm font-mono">{user.uid}</p>
           </div>
         </CardContent>
       </Card>
@@ -64,8 +106,8 @@ export default function ProfilePage() {
       <div className="space-y-4">
         <h2 className="text-xl font-semibold px-1">Personal details</h2>
         <div className="space-y-2">
-            <DetailItem label="Mobile Number" value="+251 91 527 6631" editable />
-            <DetailItem label="Email Address" value="bikilad@gmail.com" editable />
+            <DetailItem label="Mobile Number" value={user.phoneNumber || "Not provided"} editable />
+            <DetailItem label="Email Address" value={user.email || "Not provided"} editable />
             <DetailItem label="Date of Birth" value="08 Jan 1980" />
             <DetailItem label="Nationality" value="Ethiopia" />
             <DetailItem label="Gender" value="Male" />

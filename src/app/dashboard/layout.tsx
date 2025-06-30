@@ -46,6 +46,15 @@ const mobileNavItems = [
   { href: '/dashboard/profile', label: 'Profile', icon: User },
 ];
 
+const getInitials = (name?: string | null) => {
+  if (!name) return "U";
+  const parts = name.split(" ");
+  if (parts.length > 1 && parts[0] && parts[parts.length - 1]) {
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase();
+};
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -145,13 +154,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
                    <Avatar>
-                        <AvatarImage src="https://placehold.co/32x32.png" alt="User Avatar" data-ai-hint="person" />
-                        <AvatarFallback>AD</AvatarFallback>
+                        <AvatarImage src={user.photoURL || "https://placehold.co/32x32.png"} alt="User Avatar" data-ai-hint="person" />
+                        <AvatarFallback>{getInitials(user.displayName)}</AvatarFallback>
                     </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>{user.displayName || user.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href="/dashboard/profile">
