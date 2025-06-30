@@ -30,11 +30,7 @@ export default function RegistrationPage() {
       .then((userCredential) => {
         const user = userCredential.user;
         console.log("Successfully created account:", user);
-        toast({
-          title: "Account Created",
-          description: "Your account has been successfully created. Please login.",
-        });
-        router.push('/login');
+        router.push('/consent');
       })
       .catch((error) => {
         console.error("Error creating account:", error);
