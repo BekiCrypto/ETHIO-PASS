@@ -310,7 +310,7 @@ export default function Home() {
                 data-ai-hint="hologram document"
                 width="550"
                 height="310"
-                alt="A person interacting with a holographic digital document on a tablet, showing a verification seal."
+                alt="A business professional holding a hand open, with a glowing, holographic digital document and security icons floating above it."
                 className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last"
               />
             </div>
