@@ -15,6 +15,7 @@ import { Loader2 } from "lucide-react";
 
 export default function RegistrationPage() {
   const [fullName, setFullName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -26,10 +27,23 @@ export default function RegistrationPage() {
     event.preventDefault();
     setIsLoading(true);
 
+    const phoneRegex = /^(\+2519|09)\d{8}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+        toast({
+            title: "Invalid Phone Number",
+            description: "Please enter a valid Ethiopian phone number (e.g., 0912345678 or +251912345678).",
+            variant: "destructive"
+        });
+        setIsLoading(false);
+        return;
+    }
+
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log("Successfully created account:", user);
+        // In a real application, you would save the full name and phone number
+        // to a database (like Firestore) associated with user.uid here.
         router.push('/consent');
       })
       .catch((error) => {
@@ -65,6 +79,18 @@ export default function RegistrationPage() {
                 required 
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
+                disabled={isLoading}
+              />
+            </div>
+             <div className="grid gap-2">
+              <Label htmlFor="phone-number">Phone Number</Label>
+              <Input
+                id="phone-number"
+                type="tel"
+                placeholder="0912345678"
+                required
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
                 disabled={isLoading}
               />
             </div>
