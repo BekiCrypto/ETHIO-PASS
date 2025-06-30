@@ -148,13 +148,36 @@ export default function Home() {
                 <p className="max-w-[600px] text-muted-foreground md:text-xl">
                   Ethio Pass is your secure digital identity to access government and private sector services easily and safely from anywhere.
                 </p>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Button size="lg" asChild>
-                    <Link href="/registration">
-                      Create Your Ethio Pass
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Link>
-                  </Button>
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-2 min-[400px]:flex-row">
+                      <Button size="lg" asChild>
+                          <Link href="/registration">
+                          Create Your Ethio Pass
+                          <ArrowRight className="ml-2 h-5 w-5" />
+                          </Link>
+                      </Button>
+                  </div>
+                  <div className="mt-4 flex flex-col items-start gap-4 sm:flex-row">
+                      <Link href="#" className="inline-flex items-center justify-center rounded-lg bg-foreground text-background px-4 py-2.5 text-sm font-medium transition-colors hover:bg-foreground/90 w-full sm:w-auto">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" className="mr-3 h-8 w-8">
+                              <path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06Z"/>
+                              <path d="M10 2c1 .5 2 2 2 5"/>
+                          </svg>
+                          <div className="text-left">
+                              <p className="text-xs">Download on the</p>
+                              <p className="text-base font-semibold -mt-1">App Store</p>
+                          </div>
+                      </Link>
+                      <Link href="#" className="inline-flex items-center justify-center rounded-lg bg-foreground text-background px-4 py-2.5 text-sm font-medium transition-colors hover:bg-foreground/90 w-full sm:w-auto">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="mr-3 h-7 w-7">
+                              <path d="M22.471 10.916L3.92 1.047A1.511 1.511 0 0 0 2.445.923a1.522 1.522 0 0 0-.008 2.82l8.932 5.244-8.931 5.243a1.522 1.522 0 0 0 .008 2.82 1.511 1.511 0 0 0 1.474-.124l18.553-9.869a1.522 1.522 0 0 0 0-2.694z"/>
+                          </svg>
+                          <div className="text-left">
+                              <p className="text-xs">GET IT ON</p>
+                              <p className="text-base font-semibold -mt-1">Google Play</p>
+                          </div>
+                      </Link>
+                  </div>
                 </div>
               </div>
               <FrontPagePromo />
