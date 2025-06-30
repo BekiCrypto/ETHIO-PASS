@@ -261,7 +261,7 @@ export default function Home() {
                 description="Providing a secure and interoperable foundation for all public and private sector digital services."
               />
                <FeatureCard
-                icon={<UserPlus className="h-10 w-10 text-primary" />}
+                icon={<PenSquare className="h-10 w-10 text-primary" />}
                 title="Digital Signature"
                 description="Sign documents and contracts digitally with a legally recognized and secure electronic signature."
               />

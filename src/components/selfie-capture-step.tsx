@@ -9,7 +9,7 @@ import { Camera, Loader2, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 
 interface SelfieCaptureStepProps {
-  onSuccess: (result: SelfieLivenessCheckOutput) => void;
+  onSuccess: (selfieDataUri: string, result: SelfieLivenessCheckOutput) => void;
   onBack: () => void;
 }
 
@@ -77,7 +77,7 @@ export default function SelfieCaptureStep({ onSuccess, onBack }: SelfieCaptureSt
     setIsLoading(true);
     try {
       const result = await checkSelfieLiveness({ photoDataUri: image });
-      onSuccess(result);
+      onSuccess(image, result);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
       toast({
