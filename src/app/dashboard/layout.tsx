@@ -39,7 +39,7 @@ const desktopNavItems = [
 ];
 
 const mobileNavItems = [
-  { href: '/dashboard/verify', label: 'Home', icon: Home },
+  { href: '/dashboard', label: 'Home', icon: Home },
   { href: '/dashboard/documents', label: 'Documents', icon: FileText },
   { href: '/dashboard/notifications', label: 'Notifications', icon: Bell, badge: 17 },
   { href: '/dashboard/history', label: 'History', icon: ArrowRightLeft },
@@ -168,13 +168,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </DropdownMenuContent>
             </DropdownMenu>
           </header>
-          <main className="flex-1 p-4 sm:px-6 sm:py-0 md:p-8 pb-20 sm:pb-0">
+          <main className="flex-1 p-0 sm:px-6 sm:py-0 md:p-8 pb-20 sm:pb-0">
             {children}
           </main>
            <nav className="sm:hidden fixed bottom-0 left-0 right-0 bg-card border-t z-40">
             <div className="grid grid-cols-5 h-16">
               {mobileNavItems.map((item) => {
-                  const isActive = pathname === item.href || (item.href === '/dashboard/verify' && pathname === '/dashboard');
+                  const isActive = pathname === item.href;
                   return (
                     <Link
                       key={item.label}
