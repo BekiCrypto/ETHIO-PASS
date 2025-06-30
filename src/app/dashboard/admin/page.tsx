@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Activity, ShieldAlert, CheckCircle2, Users, ThumbsUp, ThumbsDown, UserSearch } from "lucide-react";
+import { Activity, ShieldAlert, CheckCircle2, Users, ThumbsUp, ThumbsDown, UserSearch, CreditCard } from "lucide-react";
 
 const stats = [
     { title: "Total Verifications", value: "12,405", icon: Activity, color: "text-blue-500" },
@@ -23,9 +23,9 @@ const recentVerifications = [
 ]
 
 const manualReviewRequests = [
-    { id: "DOC-098", user: "Lemlem H.", title: "Property Title Deed", date: "2024-07-23" },
-    { id: "DOC-095", user: "Samuel G.", title: "Professional License", date: "2024-07-22" },
-    { id: "DOC-091", user: "Fenet A.", title: "Birth Certificate", date: "2024-07-22" },
+    { id: "DOC-098", user: "Lemlem H.", title: "Property Title Deed", date: "2024-07-23", fee: 100, paymentStatus: 'Paid' },
+    { id: "DOC-095", user: "Samuel G.", title: "Professional License", date: "2024-07-22", fee: 100, paymentStatus: 'Paid' },
+    { id: "DOC-091", user: "Fenet A.", title: "Birth Certificate", date: "2024-07-22", fee: 100, paymentStatus: 'Paid' },
 ];
 
 export default function AdminPage() {
@@ -107,9 +107,9 @@ export default function AdminPage() {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                         <UserSearch className="h-5 w-5" />
-                        Manual Verification Queue (DARS)
+                        DARS Manual Review Queue
                     </CardTitle>
-                    <CardDescription>Documents flagged by the AI for manual review by the DARS team.</CardDescription>
+                    <CardDescription>Documents flagged by the AI for which users have paid for a manual review by the DARS team.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Table>
@@ -118,7 +118,7 @@ export default function AdminPage() {
                                 <TableHead>Document ID</TableHead>
                                 <TableHead>User</TableHead>
                                 <TableHead>Document Title</TableHead>
-                                <TableHead>Date</TableHead>
+                                <TableHead>Payment Status</TableHead>
                                 <TableHead className="text-right">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -128,7 +128,12 @@ export default function AdminPage() {
                                     <TableCell className="font-medium">{req.id}</TableCell>
                                     <TableCell>{req.user}</TableCell>
                                     <TableCell>{req.title}</TableCell>
-                                    <TableCell>{req.date}</TableCell>
+                                    <TableCell>
+                                        <Badge variant="default" className="bg-accent/10 text-accent-foreground border-accent/30">
+                                            <CreditCard className="mr-1 h-3 w-3" />
+                                            {req.fee} ETB Paid
+                                        </Badge>
+                                    </TableCell>
                                     <TableCell className="text-right space-x-2">
                                         <Button size="sm" variant="outline" className="border-accent text-accent-foreground hover:bg-accent/10" onClick={() => handleReviewAction('Approved', req.id)}>
                                             <ThumbsUp className="mr-2 h-4 w-4" /> Approve

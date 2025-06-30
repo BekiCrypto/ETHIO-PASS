@@ -4,7 +4,7 @@ import { useState, useRef, ChangeEvent } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Search, MoreHorizontal, FileText, Briefcase, MoreVertical, User, Upload, CheckCircle, AlertCircle, Loader2, FilePlus2, PencilRuler } from "lucide-react";
+import { Search, MoreHorizontal, FileText, Briefcase, MoreVertical, User, Upload, CheckCircle, AlertCircle, Loader2, FilePlus2, PencilRuler, ShieldCheck, Clock } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -49,7 +49,7 @@ const issuedDocuments = [
 
 const docTypes = ['Personal', 'Professional', 'Legal', 'Property', 'Financial', 'Other'];
 
-type VerificationStatus = 'Verified' | 'Unverified' | 'Needs Review';
+type VerificationStatus = 'Verified' | 'Unverified' | 'Needs Review' | 'Pending DARS Review';
 
 interface UploadedDocument {
   id: number;
@@ -65,10 +65,17 @@ interface UploadedDocument {
 export default function DocumentsPage() {
   const [activeFilter, setActiveFilter] = useState('All Documents');
   const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([]);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  
+  // State for upload dialog
+  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [currentFile, setCurrentFile] = useState<{ file: File, dataUri: string } | null>(null);
   const [newDocInfo, setNewDocInfo] = useState({ title: '', type: '' });
+
+  // State for payment dialog
+  const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
+  const [isPaying, setIsPaying] = useState(false);
+  const [selectedDocForPayment, setSelectedDocForPayment] = useState<UploadedDocument | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -85,7 +92,7 @@ export default function DocumentsPage() {
         const dataUri = e.target?.result as string;
         setCurrentFile({ file, dataUri });
         setNewDocInfo({ title: file.name.split('.').slice(0, -1).join('.'), type: '' });
-        setIsDialogOpen(true);
+        setIsUploadDialogOpen(true);
       };
       reader.readAsDataURL(file);
     }
@@ -98,7 +105,7 @@ export default function DocumentsPage() {
     }
 
     setIsVerifying(true);
-    setIsDialogOpen(false);
+    setIsUploadDialogOpen(false);
 
     try {
         const result = await verifyDocumentAuthenticity({
@@ -112,9 +119,9 @@ export default function DocumentsPage() {
         if (result.isAuthentic) {
             status = 'Verified';
             toastDescription = `Document '${newDocInfo.title}' has been successfully verified.`;
-        } else if (result.confidence > 0.4) { // Threshold for needing human review
+        } else if (result.confidence > 0.4) {
             status = 'Needs Review';
-            toastDescription = `Our AI could not confirm authenticity. Your document has been sent for manual review by DARS.`;
+            toastDescription = `Our AI could not confirm authenticity. You can request a manual review by DARS.`;
         } else {
             status = 'Unverified';
             toastDescription = `Our AI has flagged this document as potentially unauthentic.`;
@@ -143,6 +150,37 @@ export default function DocumentsPage() {
     }
   };
 
+  const handleRequestReview = (doc: UploadedDocument) => {
+    setSelectedDocForPayment(doc);
+    setIsPaymentDialogOpen(true);
+  };
+
+  const handlePayWithTelebirr = async () => {
+    if (!selectedDocForPayment) return;
+    setIsPaying(true);
+
+    // Simulate payment processing
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    setUploadedDocuments(prev =>
+        prev.map(doc =>
+            doc.id === selectedDocForPayment.id
+                ? { ...doc, status: 'Pending DARS Review' }
+                : doc
+        )
+    );
+
+    toast({
+        title: "Payment Successful",
+        description: `Your document '${selectedDocForPayment.title}' has been sent to DARS for manual review.`,
+    });
+
+    setIsPaying(false);
+    setIsPaymentDialogOpen(false);
+    setSelectedDocForPayment(null);
+  };
+
+
   const filteredIssuedDocuments = issuedDocuments.filter(doc => activeFilter === 'All Documents' || doc.type === activeFilter);
 
   const getStatusBadge = (status: VerificationStatus) => {
@@ -151,6 +189,8 @@ export default function DocumentsPage() {
         return <Badge variant="default" className="bg-accent text-accent-foreground whitespace-nowrap"><CheckCircle className="mr-1 h-3 w-3" /> Verified</Badge>;
       case 'Needs Review':
         return <Badge variant="secondary" className="whitespace-nowrap"><PencilRuler className="mr-1 h-3 w-3" /> Needs Review</Badge>;
+       case 'Pending DARS Review':
+        return <Badge variant="outline" className="text-orange-500 border-orange-500/50 whitespace-nowrap"><Clock className="mr-1 h-3 w-3" /> Pending Review</Badge>;
       case 'Unverified':
       default:
         return <Badge variant="destructive"><AlertCircle className="mr-1 h-3 w-3" /> Unverified</Badge>;
@@ -271,15 +311,26 @@ export default function DocumentsPage() {
                                   {getStatusBadge(doc.status)}
                                </div>
                             </CardHeader>
-                            <CardContent className="flex-grow flex flex-col justify-between">
+                            <CardContent className="flex-grow flex flex-col">
                                 <div className="relative w-full h-40 bg-muted rounded-md mb-4 overflow-hidden">
                                   <Image src={doc.dataUri} alt={doc.title} layout="fill" objectFit="contain" />
                                 </div>
-                                <div className="space-y-1 text-sm">
+                                <div className="flex-grow space-y-1 text-sm">
                                     <p><span className="font-semibold">Type:</span> {doc.type}</p>
                                     <p><span className="font-semibold">Uploaded:</span> {doc.date}</p>
                                     <p className="text-xs text-muted-foreground pt-1">{doc.verification.reasoning}</p>
                                 </div>
+                                {doc.status === 'Needs Review' && (
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="mt-4 w-full"
+                                        onClick={() => handleRequestReview(doc)}
+                                    >
+                                        <ShieldCheck className="mr-2 h-4 w-4" />
+                                        Request Manual Review
+                                    </Button>
+                                )}
                             </CardContent>
                         </Card>
                     ))}
@@ -298,7 +349,7 @@ export default function DocumentsPage() {
         </div>
       </div>
       
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
         <DialogContent>
             <DialogHeader>
                 <DialogTitle>Document Details</DialogTitle>
@@ -322,10 +373,35 @@ export default function DocumentsPage() {
                 </div>
             </div>
             <DialogFooter>
-                <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+                <Button variant="outline" onClick={() => setIsUploadDialogOpen(false)}>Cancel</Button>
                 <Button onClick={handleVerifyAndSave} disabled={isVerifying}>
                     {isVerifying ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                     Verify and Save
+                </Button>
+            </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
+        <DialogContent>
+            <DialogHeader>
+                <DialogTitle>Manual Verification Payment</DialogTitle>
+                <DialogDescription>
+                    A fee is required for manual verification by DARS. Please use our Telebirr integration to pay the verification fee.
+                </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+                <div className="text-center font-bold text-2xl" style={{color: '#00B8FF'}}>telebirr</div>
+                <p className="text-center text-lg font-semibold">Verification Fee: 100 ETB</p>
+                <div className="space-y-2">
+                    <Label htmlFor="telebirr-pin">Telebirr PIN</Label>
+                    <Input id="telebirr-pin" type="password" placeholder="****" />
+                </div>
+            </div>
+            <DialogFooter>
+                <Button variant="outline" onClick={() => setIsPaymentDialogOpen(false)} disabled={isPaying}>Cancel</Button>
+                <Button onClick={handlePayWithTelebirr} disabled={isPaying}>
+                    {isPaying ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Pay 100 ETB'}
                 </Button>
             </DialogFooter>
         </DialogContent>
