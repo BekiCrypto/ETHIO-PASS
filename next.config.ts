@@ -6,12 +6,6 @@ const nextConfig: NextConfig = {
     allowedDevOrigins: ["*.cloudworkstations.dev"],
   },
   /* config options here */
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   images: {
     remotePatterns: [
       {

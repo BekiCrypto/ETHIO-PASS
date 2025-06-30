@@ -93,6 +93,13 @@ export default function LoginPage() {
         });
   };
 
+  const handleForgotPassword = () => {
+    toast({
+        title: "Feature Not Available",
+        description: "Password recovery is not yet implemented.",
+    });
+  }
+
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
@@ -120,12 +127,14 @@ export default function LoginPage() {
             <div className="grid gap-2">
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
-                <Link
-                  href="#"
-                  className="ml-auto inline-block text-sm underline"
+                <Button
+                  type="button"
+                  variant="link"
+                  className="ml-auto h-auto p-0 text-sm"
+                  onClick={handleForgotPassword}
                 >
                   Forgot your password?
-                </Link>
+                </Button>
               </div>
               <Input 
                 id="password" 

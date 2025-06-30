@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Search, MoreHorizontal, ChevronRight } from "lucide-react";
-import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -84,12 +83,11 @@ export default function NotificationsPage() {
 
         <div className="flex flex-col">
             {notifications.map((notification) => (
-                <Link 
-                    href="#" 
+                <div 
                     key={notification.id} 
                     className="block border-b border-border last:border-b-0"
                 >
-                    <div className="flex items-start gap-4 p-4 hover:bg-muted/50 transition-colors">
+                    <div className="flex items-start gap-4 p-4">
                         <div className="flex-grow space-y-1">
                             <p className="font-semibold text-foreground leading-tight">
                                 {notification.title}
@@ -99,7 +97,7 @@ export default function NotificationsPage() {
                         </div>
                         <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-1" />
                     </div>
-                </Link>
+                </div>
             ))}
         </div>
     </div>

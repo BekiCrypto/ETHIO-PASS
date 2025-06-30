@@ -8,6 +8,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend } from "recharts"
 import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
+import { useToast } from "@/hooks/use-toast";
 
 const chartData = [
     { date: "July 16", ocr: 400, liveness: 240 },
@@ -22,6 +23,14 @@ const chartData = [
 export default function DeveloperPage() {
     const [apiKey, setApiKey] = useState("ep_sk_test_************************");
     const [showKey, setShowKey] = useState(false);
+    const { toast } = useToast();
+
+    const handleGenerateKey = () => {
+        toast({
+            title: "Feature Not Available",
+            description: "New API key generation is not yet implemented.",
+        })
+    }
 
     return (
         <div className="space-y-8">
@@ -43,7 +52,7 @@ export default function DeveloperPage() {
                                 <Copy className="w-4 h-4"/>
                             </Button>
                         </div>
-                        <Button>Generate New Key</Button>
+                        <Button onClick={handleGenerateKey}>Generate New Key</Button>
                     </CardContent>
                 </Card>
 

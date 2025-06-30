@@ -8,7 +8,7 @@ import { ArrowRight, Check, CheckCircle, Star, PenLine, FilePlus2, QrCode, XCirc
 import React, { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth';
 import { app } from '@/firebase';
-
+import { useToast } from '@/hooks/use-toast';
 
 function Action({ title, icon, href }: { title: string, icon: React.ReactNode, href: string }) {
     return (
@@ -46,6 +46,7 @@ export default function DashboardHomePage() {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [loading, setLoading] = useState(true);
   const auth = getAuth(app);
+  const { toast } = useToast();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -56,6 +57,13 @@ export default function DashboardHomePage() {
     });
     return () => unsubscribe();
   }, [auth]);
+
+  const handleRateExperience = () => {
+    toast({
+      title: 'Thank You!',
+      description: 'We appreciate your feedback.',
+    });
+  }
 
   if (loading) {
     return (
@@ -144,7 +152,7 @@ export default function DashboardHomePage() {
         <div className="mt-6">
             <Card className="shadow-sm">
                 <div className="flex divide-x">
-                    <Action title="Sign Documents" href="#" icon={<PenLine className="h-6 w-6 text-accent"/>} />
+                    <Action title="Sign Documents" href="/dashboard/sign" icon={<PenLine className="h-6 w-6 text-accent"/>} />
                     <Action title="Verify Signature" href="/dashboard/verify" icon={<Check className="h-6 w-6 text-accent"/>} />
                 </div>
             </Card>
@@ -153,12 +161,12 @@ export default function DashboardHomePage() {
         {/* Action List */}
         <div className="mt-4 space-y-4">
             <ActionListItem title="Add Documents" description="Request official documents from an issuer" href="/dashboard/documents" icon={<FilePlus2 className="h-6 w-6 text-accent"/>} />
-            <ActionListItem title="Scan QR Code" description="Use your camera to start document sharing" href="#" icon={<QrCode className="h-6 w-6 text-accent"/>} />
+            <ActionListItem title="Scan QR Code" description="Use your camera to start document sharing" href="/dashboard/scan-qr" icon={<QrCode className="h-6 w-6 text-accent"/>} />
         </div>
         
         {/* Rate Experience */}
         <div className="mt-8 flex justify-center">
-            <Button variant="secondary" className="rounded-full bg-primary/5 text-primary hover:bg-primary/10">
+            <Button variant="secondary" className="rounded-full bg-primary/5 text-primary hover:bg-primary/10" onClick={handleRateExperience}>
                 <Star className="h-5 w-5 mr-2" />
                 Rate your Experience
             </Button>

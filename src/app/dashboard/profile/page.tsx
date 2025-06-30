@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, RefreshCw, Pencil, CreditCard, Loader2 } from 'lucide-react';
+import { ArrowLeft, RefreshCw, CreditCard, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -8,20 +8,14 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth';
 import { app } from '@/firebase';
+import { useRouter } from 'next/navigation';
 
-function DetailItem({ label, value, editable = false }: { label: string, value: string, editable?: boolean }) {
+function DetailItem({ label, value }: { label: string, value: string }) {
   return (
     <Card className="bg-background shadow-sm">
-      <CardContent className="p-3 flex justify-between items-center">
-        <div>
-          <p className="text-sm text-muted-foreground">{label}</p>
-          <p className="font-semibold">{value}</p>
-        </div>
-        {editable && (
-          <Button variant="ghost" size="icon" className="text-primary">
-            <Pencil className="h-4 w-4" />
-          </Button>
-        )}
+      <CardContent className="p-3">
+        <p className="text-sm text-muted-foreground">{label}</p>
+        <p className="font-semibold">{value}</p>
       </CardContent>
     </Card>
   );
@@ -40,16 +34,19 @@ export default function ProfilePage() {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [loading, setLoading] = useState(true);
   const auth = getAuth(app);
+  const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
         if (currentUser) {
             setUser(currentUser);
+        } else {
+            router.replace('/login');
         }
         setLoading(false);
     });
     return () => unsubscribe();
-  }, [auth]);
+  }, [auth, router]);
 
   if (loading) {
     return (
@@ -60,11 +57,7 @@ export default function ProfilePage() {
   }
 
   if (!user) {
-    return (
-      <div className="flex h-64 items-center justify-center text-center">
-        <p>Could not load user profile. Please try logging in again.</p>
-      </div>
-    );
+    return null;
   }
 
   return (
@@ -106,8 +99,8 @@ export default function ProfilePage() {
       <div className="space-y-4">
         <h2 className="text-xl font-semibold px-1">Personal details</h2>
         <div className="space-y-2">
-            <DetailItem label="Mobile Number" value={user.phoneNumber || "Not provided"} editable />
-            <DetailItem label="Email Address" value={user.email || "Not provided"} editable />
+            <DetailItem label="Mobile Number" value={user.phoneNumber || "Not provided"} />
+            <DetailItem label="Email Address" value={user.email || "Not provided"} />
             <DetailItem label="Date of Birth" value="08 Jan 1980" />
             <DetailItem label="Nationality" value="Ethiopia" />
             <DetailItem label="Gender" value="Male" />

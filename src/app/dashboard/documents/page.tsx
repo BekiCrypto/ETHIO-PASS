@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Search, MoreHorizontal, FileText, Briefcase, ArrowUpDown, MoreVertical, User, CircleAlert } from "lucide-react";
+import { Search, MoreHorizontal, FileText, Briefcase, ArrowUpDown, MoreVertical, User, CircleAlert, Upload } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +14,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useToast } from '@/hooks/use-toast';
+import { Input } from '@/components/ui/input';
 
 const filters = [
     { name: 'All Documents', icon: FileText },
@@ -26,6 +28,21 @@ const documents: any[] = [];
 export default function DocumentsPage() {
   const [view, setView] = useState('list');
   const [activeFilter, setActiveFilter] = useState('All Documents');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  }
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+        toast({
+            title: 'File Selected: ' + event.target.files[0].name,
+            description: "Document upload functionality is not yet implemented.",
+        })
+    }
+  }
 
   const EmptyState = () => (
     <div className="flex flex-col items-center justify-center text-center py-20 space-y-4">
@@ -33,7 +50,7 @@ export default function DocumentsPage() {
         <CircleAlert className="h-10 w-10 text-muted-foreground" />
       </div>
       <div className="space-y-1">
-        <p className="text-lg font-semibold">No uploaded documents yet</p>
+        <p className="text-lg font-semibold">No documents yet</p>
         <p className="text-muted-foreground text-sm max-w-xs mx-auto">
           You can add a document by tapping "Upload a document"
         </p>
@@ -134,12 +151,7 @@ export default function DocumentsPage() {
                 </div>
               </>
             ) : (
-                <>
-                    <p className="text-sm text-muted-foreground mb-2 px-4">
-                        No uploaded documents under "All Documents"
-                    </p>
-                    <EmptyState />
-                </>
+                <EmptyState />
             )}
           </div>
         </TabsContent>
@@ -149,9 +161,12 @@ export default function DocumentsPage() {
         </TabsContent>
       </Tabs>
       
+      <Input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
+
       {/* Footer Button - mobile only */}
        <div className="sm:hidden fixed bottom-[calc(theme(spacing.16)_+_theme(spacing.4))] left-4 right-4 z-30">
-            <Button className="w-full h-12 text-base font-semibold shadow-lg bg-foreground text-background hover:bg-foreground/90">
+            <Button onClick={handleUploadClick} className="w-full h-12 text-base font-semibold shadow-lg bg-foreground text-background hover:bg-foreground/90">
+                <Upload className="mr-2 h-5 w-5" />
                 Upload a document
             </Button>
         </div>
