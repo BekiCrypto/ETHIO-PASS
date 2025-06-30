@@ -25,16 +25,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ScanLine, Shield, Code, User, LogOut, Settings, Loader2 } from 'lucide-react';
+import { ScanLine, Shield, Code, User, LogOut, Settings, Loader2, Home, FileText, Bell, History } from 'lucide-react';
 import { EthioPassLogo } from '@/components/aman-logo';
 import { getAuth, signOut, onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth';
 import { app } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 
-const navItems = [
+const desktopNavItems = [
   { href: '/dashboard/verify', label: 'Verify ID', icon: ScanLine, a11y: "Verify ID" },
   { href: '/dashboard/admin', label: 'Admin Panel', icon: Shield, a11y: "Admin Panel" },
   { href: '/dashboard/developer', label: 'Developer Portal', icon: Code, a11y: "Developer Portal" },
+];
+
+const mobileNavItems = [
+  { href: '/dashboard/verify', label: 'Home', icon: Home },
+  { href: '/dashboard/documents', label: 'Documents', icon: FileText },
+  { href: '/dashboard/notifications', label: 'Notifications', icon: Bell, badge: 17 },
+  { href: '/dashboard/history', label: 'History', icon: History },
+  { href: '/dashboard/profile', label: 'Profile', icon: User },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -95,7 +104,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </SidebarHeader>
           <SidebarContent>
             <SidebarMenu>
-              {navItems.map((item) => (
+              {desktopNavItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton
                     asChild
@@ -141,9 +150,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <User className="mr-2 h-4 w-4" />
-                  <span>Profile</span>
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard/profile">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Settings className="mr-2 h-4 w-4" />
@@ -157,9 +168,36 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </DropdownMenuContent>
             </DropdownMenu>
           </header>
-          <main className="flex-1 p-4 sm:px-6 sm:py-0 md:p-8">
+          <main className="flex-1 p-4 sm:px-6 sm:py-0 md:p-8 pb-20 sm:pb-0">
             {children}
           </main>
+           <nav className="sm:hidden fixed bottom-0 left-0 right-0 bg-card border-t z-40">
+            <div className="grid grid-cols-5 h-16">
+              {mobileNavItems.map((item) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      className={cn(
+                        "flex flex-col items-center justify-center gap-1 text-xs font-medium",
+                        isActive ? "text-primary" : "text-muted-foreground"
+                      )}
+                    >
+                        <div className="relative">
+                            <item.icon className="h-6 w-6" />
+                            {item.badge && (
+                                <span className="absolute -top-1 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-destructive-foreground text-[10px]">
+                                    {item.badge}
+                                </span>
+                            )}
+                        </div>
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+            </div>
+          </nav>
         </SidebarInset>
       </div>
     </SidebarProvider>
