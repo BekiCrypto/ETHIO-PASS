@@ -307,7 +307,7 @@ export default function Home() {
               </div>
               <Image
                 src="https://placehold.co/550x310.png"
-                data-ai-hint="digital seal"
+                data-ai-hint="hologram document"
                 width="550"
                 height="310"
                 alt="A person interacting with a holographic digital document on a tablet, showing a verification seal."
