@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Search, MoreHorizontal, FileText, Briefcase, AlertCircle, ArrowUpDown, Scale, Building2, MoreVertical } from "lucide-react";
+import { Search, MoreHorizontal, FileText, Briefcase, ArrowUpDown, MoreVertical, User, CircleAlert } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,24 +16,30 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const filters = [
+    { name: 'All Documents', icon: FileText },
+    { name: 'Personal', icon: User },
     { name: 'Professional', icon: Briefcase },
-    { name: 'Legal', icon: Scale },
-    { name: 'Property', icon: Building2 },
-    { name: 'Others', icon: FileText },
 ];
 
-const documents = [
-  {
-    id: 'doc-1',
-    title: 'Driving License',
-    issuer: 'Ministry of Interior',
-    validUntil: '29 Jul 2025',
-  }
-];
+const documents: any[] = [];
 
 export default function DocumentsPage() {
   const [view, setView] = useState('list');
   const [activeFilter, setActiveFilter] = useState('All Documents');
+
+  const EmptyState = () => (
+    <div className="flex flex-col items-center justify-center text-center py-20 space-y-4">
+      <div className="p-4 bg-muted rounded-full">
+        <CircleAlert className="h-10 w-10 text-muted-foreground" />
+      </div>
+      <div className="space-y-1">
+        <p className="text-lg font-semibold">No uploaded documents yet</p>
+        <p className="text-muted-foreground text-sm max-w-xs mx-auto">
+          You can add a document by tapping "Upload a document"
+        </p>
+      </div>
+    </div>
+  );
 
   return (
     <div className="flex flex-col h-full space-y-4">
@@ -82,7 +88,7 @@ export default function DocumentsPage() {
             {filters.map((filter) => (
               <Button 
                 key={filter.name}
-                variant={"secondary"}
+                variant={activeFilter === filter.name ? 'default' : 'secondary'}
                 className="shrink-0"
                 onClick={() => setActiveFilter(filter.name)}
               >
@@ -94,58 +100,59 @@ export default function DocumentsPage() {
 
           {/* Document List */}
           <div>
-            <p className="text-sm text-muted-foreground mb-2">
-              {`${documents.length} issued document under "All Documents"`}
-            </p>
-            <div className="space-y-3">
-              {documents.map((doc) => (
-                <Card key={doc.id}>
-                  <CardContent className="p-4 flex justify-between items-start">
-                    <div>
-                      <p className="text-sm text-primary font-medium">Valid until {doc.validUntil}</p>
-                      <p className="text-lg font-bold">{doc.title}</p>
-                      <p className="text-muted-foreground">{doc.issuer}</p>
-                    </div>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="-mr-2 -mt-2 h-8 w-8 rounded-full">
-                          <MoreVertical className="h-5 w-5" />
-                          <span className="sr-only">Document options</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View Details</DropdownMenuItem>
-                        <DropdownMenuItem>Share Document</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-destructive focus:text-destructive-foreground focus:bg-destructive">Revoke</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            {documents.length > 0 ? (
+              <>
+                <p className="text-sm text-muted-foreground mb-2">
+                  {`${documents.length} issued document under "${activeFilter}"`}
+                </p>
+                <div className="space-y-3">
+                  {documents.map((doc) => (
+                    <Card key={doc.id}>
+                      <CardContent className="p-4 flex justify-between items-start">
+                        <div>
+                          <p className="text-sm text-primary font-medium">Valid until {doc.validUntil}</p>
+                          <p className="text-lg font-bold">{doc.title}</p>
+                          <p className="text-muted-foreground">{doc.issuer}</p>
+                        </div>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="-mr-2 -mt-2 h-8 w-8 rounded-full">
+                              <MoreVertical className="h-5 w-5" />
+                              <span className="sr-only">Document options</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>View Details</DropdownMenuItem>
+                            <DropdownMenuItem>Share Document</DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem className="text-destructive focus:text-destructive-foreground focus:bg-destructive">Revoke</DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </>
+            ) : (
+                <>
+                    <p className="text-sm text-muted-foreground mb-2 px-4">
+                        No uploaded documents under "All Documents"
+                    </p>
+                    <EmptyState />
+                </>
+            )}
           </div>
         </TabsContent>
         
         <TabsContent value="uploaded">
-            <div className="flex flex-col items-center justify-center text-center py-20 space-y-4">
-                <div className="p-4 bg-muted rounded-full">
-                    <AlertCircle className="h-10 w-10 text-muted-foreground" />
-                </div>
-                <div className="space-y-1">
-                  <p className="text-lg font-semibold">No uploaded documents yet</p>
-                  <p className="text-muted-foreground text-sm max-w-xs mx-auto">
-                    You can add a document by tapping "Upload a document"
-                  </p>
-                </div>
-            </div>
+            <EmptyState />
         </TabsContent>
       </Tabs>
       
       {/* Footer Button - mobile only */}
        <div className="sm:hidden fixed bottom-[calc(theme(spacing.16)_+_theme(spacing.4))] left-4 right-4 z-30">
             <Button className="w-full h-12 text-base font-semibold shadow-lg bg-foreground text-background hover:bg-foreground/90">
-                Request a document
+                Upload a document
             </Button>
         </div>
     </div>
