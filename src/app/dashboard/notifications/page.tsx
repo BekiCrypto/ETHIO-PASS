@@ -44,8 +44,8 @@ const notifications = [
     },
     {
         id: "notif-6",
-        title: "Account accessed from a new device",
-        source: "Ethio Pass Security",
+        title: "Your digital Residence Permit is expiring soon",
+        source: "Immigration and Citizenship Service",
         date: "14 Dec 2024",
     },
     {
