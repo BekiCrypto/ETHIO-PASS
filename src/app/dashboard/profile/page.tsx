@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, RefreshCw, CreditCard, Loader2 } from 'lucide-react';
+import { ArrowLeft, Edit, CreditCard, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -15,7 +15,7 @@ function DetailItem({ label, value }: { label: string, value: string }) {
     <Card className="bg-background shadow-sm">
       <CardContent className="p-3">
         <p className="text-sm text-muted-foreground">{label}</p>
-        <p className="font-semibold">{value}</p>
+        <p className="font-semibold">{value || 'Not provided'}</p>
       </CardContent>
     </Card>
   );
@@ -68,20 +68,14 @@ export default function ProfilePage() {
             <ArrowLeft className="h-5 w-5" />
           </Link>
         </Button>
-        <h1 className="text-3xl font-bold font-headline">Personal details</h1>
+        <h1 className="text-3xl font-bold font-headline flex-grow">Personal details</h1>
+        <Button asChild variant="outline" size="sm">
+            <Link href="/dashboard/settings">
+                <Edit className="mr-2 h-4 w-4" />
+                Edit Profile
+            </Link>
+        </Button>
       </div>
-
-      <Card className="bg-green-100/50 dark:bg-green-900/20 border-green-500/30">
-        <CardContent className="p-3 flex items-start gap-3">
-          <RefreshCw className="h-5 w-5 text-green-700 dark:text-green-400 mt-1 flex-shrink-0" />
-          <div>
-            <p className="font-semibold text-sm text-green-800 dark:text-green-300">Is your data outdated?</p>
-            <p className="text-xs text-green-700/80 dark:text-green-400/80">
-              Refresh or pull down the screen to update your details as per Federal Authority for Identity, Citizenship, Customs & Port Security.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
 
       <Card>
         <CardContent className="p-4 flex items-center gap-4">
@@ -97,18 +91,17 @@ export default function ProfilePage() {
       </Card>
       
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold px-1">Personal details</h2>
-        <div className="space-y-2">
-            <DetailItem label="Mobile Number" value={user.phoneNumber || "Not provided"} />
-            <DetailItem label="Email Address" value={user.email || "Not provided"} />
-            <DetailItem label="Date of Birth" value="08 Jan 1980" />
-            <DetailItem label="Nationality" value="Ethiopia" />
-            <DetailItem label="Gender" value="Male" />
+        <h2 className="text-xl font-semibold px-1">Account Information</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <DetailItem label="Display Name" value={user.displayName || ''} />
+            <DetailItem label="Email Address" value={user.email || ''} />
+            <DetailItem label="Email Verified" value={user.emailVerified ? 'Yes' : 'No'} />
+            <DetailItem label="Mobile Number" value={user.phoneNumber || ''} />
         </div>
       </div>
 
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold px-1">Fayida ID</h2>
+        <h2 className="text-xl font-semibold px-1">Fayida ID (Example)</h2>
         <Card>
           <CardContent className="p-4 flex items-center gap-4">
             <CreditCard className="h-8 w-8 text-primary flex-shrink-0" />

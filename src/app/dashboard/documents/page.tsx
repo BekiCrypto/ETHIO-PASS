@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Search, MoreHorizontal, FileText, Briefcase, ArrowUpDown, MoreVertical, User, CircleAlert, Upload } from "lucide-react";
+import { Search, MoreHorizontal, FileText, Briefcase, ArrowUpDown, MoreVertical, User, Upload, CircleAlert } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,7 +23,11 @@ const filters = [
     { name: 'Professional', icon: Briefcase },
 ];
 
-const documents: any[] = [];
+const documents = [
+  { id: 1, title: 'National ID Card', issuer: 'Federal NID Agency', validUntil: '15 Jan 2030', type: 'Personal' },
+  { id: 2, title: "Driver's License", issuer: 'Transport Authority', validUntil: '22 Oct 2028', type: 'Personal' },
+  { id: 3, title: 'University Degree', issuer: 'Addis Ababa University', validUntil: 'N/A', type: 'Professional' },
+];
 
 export default function DocumentsPage() {
   const [view, setView] = useState('list');
@@ -43,6 +47,8 @@ export default function DocumentsPage() {
         })
     }
   }
+
+  const filteredDocuments = documents.filter(doc => activeFilter === 'All Documents' || doc.type === activeFilter);
 
   const EmptyState = () => (
     <div className="flex flex-col items-center justify-center text-center py-20 space-y-4">
@@ -117,13 +123,13 @@ export default function DocumentsPage() {
 
           {/* Document List */}
           <div>
-            {documents.length > 0 ? (
+            {filteredDocuments.length > 0 ? (
               <>
                 <p className="text-sm text-muted-foreground mb-2">
-                  {`${documents.length} issued document under "${activeFilter}"`}
+                  {`${filteredDocuments.length} issued document(s) under "${activeFilter}"`}
                 </p>
                 <div className="space-y-3">
-                  {documents.map((doc) => (
+                  {filteredDocuments.map((doc) => (
                     <Card key={doc.id}>
                       <CardContent className="p-4 flex justify-between items-start">
                         <div>
