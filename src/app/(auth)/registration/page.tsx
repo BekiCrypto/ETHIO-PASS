@@ -15,6 +15,7 @@ import { Loader2 } from "lucide-react";
 
 export default function RegistrationPage() {
   const [fullName, setFullName] = useState('');
+  const [fayidaId, setFayidaId] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -42,7 +43,7 @@ export default function RegistrationPage() {
       .then((userCredential) => {
         const user = userCredential.user;
         console.log("Successfully created account:", user);
-        // In a real application, you would save the full name and phone number
+        // In a real application, you would save the full name, phone number, and Fayida ID
         // to a database (like Firestore) associated with user.uid here.
         router.push('/consent');
       })
@@ -79,6 +80,16 @@ export default function RegistrationPage() {
                 required 
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
+                disabled={isLoading}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="fayida-id">Fayida ID (Optional)</Label>
+              <Input
+                id="fayida-id"
+                placeholder="123456789012"
+                value={fayidaId}
+                onChange={(e) => setFayidaId(e.target.value)}
                 disabled={isLoading}
               />
             </div>
