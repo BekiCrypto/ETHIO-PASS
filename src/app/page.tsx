@@ -309,7 +309,7 @@ export default function Home() {
                 width="550"
                 height="310"
                 alt="Verified Document"
-                data-ai-hint="verified document"
+                data-ai-hint="digital seal"
                 className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last"
               />
             </div>
