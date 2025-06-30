@@ -71,7 +71,10 @@ export default function ConsentPage() {
   
   if (loading) {
     return (
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <div className="flex flex-col items-center gap-4">
+            <EthioPassLogo />
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
     );
   }
 

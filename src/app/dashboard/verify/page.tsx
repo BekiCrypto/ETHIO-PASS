@@ -11,6 +11,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { performBiometricMatch } from './actions';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import { EthioPassLogo } from '@/components/aman-logo';
 
 type Step = 'ID_UPLOAD' | 'SELFIE_CAPTURE' | 'RESULTS';
 
@@ -73,10 +74,13 @@ export default function VerifyPage() {
   const renderContent = () => {
     if (isMatching) {
         return (
-            <div className="flex flex-col items-center justify-center space-y-4 p-12">
-                <Loader2 className="h-12 w-12 animate-spin text-primary" />
-                <h3 className="text-xl font-semibold">Performing Biometric Match...</h3>
-                <p className="text-muted-foreground">Comparing your selfie with the ID document.</p>
+            <div className="flex flex-col items-center justify-center space-y-6 p-12">
+                <EthioPassLogo />
+                <Loader2 className="h-10 w-10 animate-spin text-primary" />
+                <div className="text-center">
+                    <h3 className="text-xl font-semibold">Performing Biometric Match...</h3>
+                    <p className="text-muted-foreground">Comparing your selfie with the ID document.</p>
+                </div>
             </div>
         )
     }
