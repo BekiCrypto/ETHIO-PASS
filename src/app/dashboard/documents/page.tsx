@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Search, MoreHorizontal, FileText, User, Briefcase, MoreVertical } from "lucide-react";
+import { Search, MoreHorizontal, FileText, User, Briefcase, AlertCircle } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -79,39 +79,29 @@ export default function DocumentsPage() {
 
           {/* Document Count */}
           <p className="text-sm text-muted-foreground">
-            1 issued document under "All Documents"
+            No issued documents under "All Documents"
           </p>
-
-          {/* Document Card */}
-          <Card>
-            <CardContent className="p-4 flex items-start justify-between">
-              <div className="space-y-1">
-                <p className="text-xs text-accent font-medium">Valid until 29 Jul 2025</p>
-                <h3 className="text-lg font-bold">Driving License</h3>
-                <p className="text-sm text-muted-foreground">Ministry of Interior</p>
-              </div>
-              <Button variant="ghost" size="icon" className="-mr-2 -mt-2">
-                <MoreVertical className="h-5 w-5" />
-                <span className="sr-only">Document Options</span>
-              </Button>
-            </CardContent>
-          </Card>
-
         </TabsContent>
         
         <TabsContent value="uploaded">
-            <div className="flex flex-col items-center justify-center text-center py-24">
-                <p className="text-muted-foreground">
-                You have not uploaded any documents.
-                </p>
+            <div className="flex flex-col items-center justify-center text-center py-20 space-y-4">
+                <div className="p-4 bg-muted rounded-full">
+                    <AlertCircle className="h-10 w-10 text-muted-foreground" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-lg font-semibold">No uploaded documents yet</p>
+                  <p className="text-muted-foreground text-sm max-w-xs mx-auto">
+                    You can add a document by tapping "Upload a document"
+                  </p>
+                </div>
             </div>
         </TabsContent>
       </Tabs>
       
       {/* Footer Button - mobile only */}
        <div className="sm:hidden fixed bottom-[calc(theme(spacing.16)_+_theme(spacing.4))] left-4 right-4 z-30">
-            <Button className="w-full h-12 text-base font-semibold shadow-lg">
-                Request a document
+            <Button className="w-full h-12 text-base font-semibold shadow-lg bg-foreground text-background hover:bg-foreground/90">
+                Upload a document
             </Button>
         </div>
     </div>
