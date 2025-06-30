@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Ethio Pass API",
-    "description": "API for Ethiopian Smart ID and e-KYC services.",
+    "description": "Secure national e-KYC API platform for identity verification using biometrics, OCR, and liveness detection.",
     "version": "1.0.0"
   },
   "servers": [
@@ -11,16 +11,16 @@
     }
   ],
   "paths": {
-    "/verify/ocr": {
+    "/verify-id": {
       "post": {
-        "summary": "Extract text from an ID document",
-        "description": "Upload an image of an Ethiopian National ID, passport, or driver's license to extract text content using OCR.",
+        "summary": "Verify ID Document (OCR)",
+        "description": "Upload an image of an Ethiopian National ID, passport, or driver's license to extract text using OCR.",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/OcrRequest"
+                "$ref": "#/components/schemas/EthiopianOCRVerificationInput"
               }
             }
           }
@@ -31,24 +31,26 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OcrResponse"
+                  "$ref": "#/components/schemas/EthiopianOCRVerificationOutput"
                 }
               }
             }
-          }
+          },
+          "400": { "description": "Bad Request" },
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
-    "/verify/liveness": {
+    "/liveness": {
       "post": {
-        "summary": "Perform a selfie liveness check",
-        "description": "Upload a selfie image to verify if it's a live person, preventing spoofing.",
+        "summary": "Selfie Liveness Check",
+        "description": "Analyze a selfie image to determine if it is of a live person or a spoofing attempt.",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LivenessRequest"
+                "$ref": "#/components/schemas/SelfieLivenessCheckInput"
               }
             }
           }
@@ -59,24 +61,26 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LivenessResponse"
+                  "$ref": "#/components/schemas/SelfieLivenessCheckOutput"
                 }
               }
             }
-          }
+          },
+          "400": { "description": "Bad Request" },
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
-    "/verify/match": {
+    "/match": {
       "post": {
-        "summary": "Perform biometric face matching",
-        "description": "Compare a photo from an ID document with a selfie to verify they are the same person.",
+        "summary": "Biometric Face Match",
+        "description": "Compare two images (one from an ID, one from a selfie) to verify if they are the same person.",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/MatchRequest"
+                "$ref": "#/components/schemas/BiometricMatchInput"
               }
             }
           }
@@ -87,85 +91,93 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MatchResponse"
+                  "$ref": "#/components/schemas/BiometricMatchOutput"
                 }
               }
             }
-          }
+          },
+          "400": { "description": "Bad Request" },
+          "500": { "description": "Internal Server Error" }
         }
       }
     }
   },
   "components": {
     "schemas": {
-      "OcrRequest": {
+      "EthiopianOCRVerificationInput": {
         "type": "object",
         "properties": {
           "photoDataUri": {
             "type": "string",
             "format": "uri",
-            "description": "A data URI of the ID document image."
+            "description": "A photo of an Ethiopian document as a data URI."
           }
-        }
+        },
+        "required": ["photoDataUri"]
       },
-      "OcrResponse": {
+      "EthiopianOCRVerificationOutput": {
         "type": "object",
         "properties": {
           "extractedData": {
             "type": "string",
-            "description": "The text extracted from the document."
+            "description": "The extracted data from the document."
           }
         }
       },
-      "LivenessRequest": {
+      "SelfieLivenessCheckInput": {
         "type": "object",
         "properties": {
           "photoDataUri": {
             "type": "string",
             "format": "uri",
-            "description": "A data URI of the selfie image."
+            "description": "A selfie photo as a data URI."
           }
-        }
+        },
+        "required": ["photoDataUri"]
       },
-      "LivenessResponse": {
+      "SelfieLivenessCheckOutput": {
         "type": "object",
         "properties": {
           "isLive": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether the selfie is of a live person."
           },
           "confidence": {
             "type": "number",
-            "format": "float"
+            "description": "The confidence level of the liveness detection (0-1)."
           }
         }
       },
-      "MatchRequest": {
+      "BiometricMatchInput": {
         "type": "object",
         "properties": {
           "idPhotoDataUri": {
             "type": "string",
             "format": "uri",
-            "description": "A data URI of the ID document image."
+            "description": "A photo from an ID document as a data URI."
           },
           "selfiePhotoDataUri": {
             "type": "string",
             "format": "uri",
-            "description": "A data URI of the selfie image."
+            "description": "A selfie photo as a data URI."
           }
-        }
+        },
+        "required": ["idPhotoDataUri", "selfiePhotoDataUri"]
       },
-      "MatchResponse": {
+      "BiometricMatchOutput": {
         "type": "object",
         "properties": {
           "match": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether the two faces are a likely match."
           },
           "confidence": {
             "type": "number",
-            "format": "float"
+            "description": "A confidence score (0-1) for the match determination."
           },
           "reasoning": {
-            "type": "string"
+            "type": "string",
+            "description": "A brief explanation for the decision."
           }
         }
       }
