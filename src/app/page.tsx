@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -305,7 +306,7 @@ export default function Home() {
                 </ul>
               </div>
               <Image
-                src="https://placehold.co/600x400.png"
+                src="https://placehold.co/550x310.png"
                 width="550"
                 height="310"
                 alt="Verified Document"
