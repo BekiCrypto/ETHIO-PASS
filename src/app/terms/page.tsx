@@ -22,7 +22,7 @@ export default function TermsOfServicePage() {
         <Card>
           <CardHeader>
             <CardTitle className="text-4xl font-headline">Terms of Service</CardTitle>
-            <p className="text-muted-foreground">Last Updated: July 23, 2024</p>
+            <p className="text-muted-foreground">Last Updated: July 23, 2025</p>
           </CardHeader>
           <CardContent className="space-y-8">
             <div>
