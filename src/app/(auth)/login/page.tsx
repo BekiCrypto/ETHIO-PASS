@@ -14,7 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 
 export default function LoginPage() {
-  const [emailOrPhone, setEmailOrPhone] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const auth = getAuth(app);
@@ -25,11 +25,12 @@ export default function LoginPage() {
     event.preventDefault();
     setIsLoading(true);
 
-    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailOrPhone);
-    const isPhone = /^(\+2519|09)\d{8}$/.test(emailOrPhone);
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
+    const isPhone = /^(\+2519|09)\d{8}$/.test(identifier);
+    const isFayidaId = /^\d{12}$/.test(identifier);
 
     if (isEmail) {
-      signInWithEmailAndPassword(auth, emailOrPhone, password)
+      signInWithEmailAndPassword(auth, identifier, password)
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
@@ -54,10 +55,18 @@ export default function LoginPage() {
             variant: "destructive"
         });
         setIsLoading(false);
-    } else {
+    } else if (isFayidaId) {
+        toast({
+            title: "Fayida ID Login Not Supported",
+            description: "Password login with a Fayida ID is not yet available. Please use your email address.",
+            variant: "destructive"
+        });
+        setIsLoading(false);
+    }
+    else {
         toast({
             title: "Invalid Input",
-            description: "Please enter a valid email address.",
+            description: "Please enter a valid email, phone number, or Fayida ID.",
             variant: "destructive"
         });
         setIsLoading(false);
@@ -70,21 +79,21 @@ export default function LoginPage() {
         <EthioPassLogo />
         <CardTitle className="text-2xl mt-4">Login</CardTitle>
         <CardDescription>
-          Enter your email or phone number to login
+          Enter your email, phone, or Fayida ID to login
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleLogin}>
           <div className="grid gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="email-or-phone">Email or Phone Number</Label>
+              <Label htmlFor="identifier">Email, Phone, or Fayida ID</Label>
               <Input
-                id="email-or-phone"
+                id="identifier"
                 type="text"
-                placeholder="m@example.com or 0912345678"
+                placeholder="e.g. m@example.com / 09... / 123..."
                 required
-                value={emailOrPhone}
-                onChange={(e) => setEmailOrPhone(e.target.value)}
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
                 disabled={isLoading}
               />
             </div>
