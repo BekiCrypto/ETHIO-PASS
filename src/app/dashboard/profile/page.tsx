@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, RefreshCw, Pencil, CreditCard } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Pencil, CreditCard, UserCheck, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -61,6 +61,24 @@ export default function ProfilePage() {
         </CardContent>
       </Card>
       
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold px-1">Account Status</h2>
+        <Link href="/dashboard/account-benefits">
+          <Card className="hover:bg-muted/50 transition-colors">
+            <CardContent className="p-4 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <UserCheck className="h-8 w-8 text-primary flex-shrink-0" />
+                <div>
+                  <p className="font-semibold text-lg">Verified Account</p>
+                  <p className="text-sm text-muted-foreground">View account benefits</p>
+                </div>
+              </div>
+              <ArrowRight className="h-5 w-5 text-muted-foreground" />
+            </CardContent>
+          </Card>
+        </Link>
+      </div>
+
       <div className="space-y-4">
         <h2 className="text-xl font-semibold px-1">Personal details</h2>
         <div className="space-y-2">
