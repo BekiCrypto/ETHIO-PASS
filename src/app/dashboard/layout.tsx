@@ -25,7 +25,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ScanLine, Shield, Code, User, LogOut, Settings, Loader2, Home, FileText, Bell, History } from 'lucide-react';
+import { ScanLine, Shield, Code, User, LogOut, Settings, Loader2, Home, FileText, Bell, ArrowRightLeft } from 'lucide-react';
 import { EthioPassLogo } from '@/components/aman-logo';
 import { getAuth, signOut, onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth';
 import { app } from '@/firebase';
@@ -42,7 +42,7 @@ const mobileNavItems = [
   { href: '/dashboard/verify', label: 'Home', icon: Home },
   { href: '/dashboard/documents', label: 'Documents', icon: FileText },
   { href: '/dashboard/notifications', label: 'Notifications', icon: Bell, badge: 17 },
-  { href: '/dashboard/history', label: 'History', icon: History },
+  { href: '/dashboard/history', label: 'History', icon: ArrowRightLeft },
   { href: '/dashboard/profile', label: 'Profile', icon: User },
 ];
 
@@ -174,7 +174,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
            <nav className="sm:hidden fixed bottom-0 left-0 right-0 bg-card border-t z-40">
             <div className="grid grid-cols-5 h-16">
               {mobileNavItems.map((item) => {
-                  const isActive = pathname === item.href;
+                  const isActive = pathname === item.href || (item.href === '/dashboard/verify' && pathname === '/dashboard');
                   return (
                     <Link
                       key={item.label}
