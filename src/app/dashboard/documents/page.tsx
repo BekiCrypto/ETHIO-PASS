@@ -1,11 +1,24 @@
 'use client';
 
+import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Search, ArrowUpDown, MoreHorizontal, FileText, User, Briefcase, MoreVertical } from "lucide-react";
+import { Search, MoreHorizontal, FileText, User, Briefcase, MoreVertical } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 
 export default function DocumentsPage() {
+  const [view, setView] = useState('list');
+  const [sortBy, setSortBy] = useState('documentName');
+
   return (
     <div className="flex flex-col h-full space-y-4">
       {/* Header */}
@@ -16,14 +29,27 @@ export default function DocumentsPage() {
             <Search className="h-5 w-5" />
             <span className="sr-only">Search Documents</span>
           </Button>
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <ArrowUpDown className="h-5 w-5" />
-            <span className="sr-only">Sort Documents</span>
-          </Button>
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <MoreHorizontal className="h-5 w-5" />
-            <span className="sr-only">More Options</span>
-          </Button>
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <MoreHorizontal className="h-5 w-5" />
+                <span className="sr-only">More Options</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuRadioGroup value={view} onValueChange={setView}>
+                <DropdownMenuRadioItem value="list">List view (default)</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="type">Type view</DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuRadioGroup value={sortBy} onValueChange={setSortBy}>
+                <DropdownMenuRadioItem value="documentName">Sort by document name (default)</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="issuerName">Sort by issuer name</DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
         </div>
       </header>
 
