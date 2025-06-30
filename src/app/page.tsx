@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, UserPlus, ScanFace, KeyRound, ShieldCheck, FileText, Server, PenSquare, BadgeCheck, FilePlus2, QrCode, Home as HomeIcon, Bell, User as UserIcon, Check } from 'lucide-react';
+import { ArrowRight, UserPlus, ScanFace, KeyRound, ShieldCheck, FileText, Server, PenSquare, BadgeCheck, FilePlus2, QrCode, Home as HomeIcon, Bell, User as UserIcon, Check, Landmark, GraduationCap, Building, User } from 'lucide-react';
 import { EthioPassLogo } from '@/components/aman-logo';
 
 
@@ -268,9 +268,76 @@ export default function Home() {
             </div>
           </div>
         </section>
+        
+        {/* Document Verification Section */}
+        <section id="document-verification" className="w-full py-12 md:py-24 lg:py-32 bg-card">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm">Document Verification</div>
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">A New Standard for Document Trust</h2>
+              <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                For individuals and enterprises, Ethio Pass authenticates your most critical documents, providing a trusted digital verification badge. Reduce workload, wait times, and investment in manual checks.
+              </p>
+            </div>
+            <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-2 lg:gap-12">
+              <div className="flex flex-col justify-center space-y-4">
+                <h3 className="text-2xl font-bold">Verify Any Document, Instantly</h3>
+                <p className="text-muted-foreground">
+                  Our powerful AI analyzes various document types for authenticity, giving you peace of mind and a verifiable, tamper-proof digital version.
+                </p>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <li className="flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-primary" />
+                    <span>Identity & Legal Docs</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <GraduationCap className="h-5 w-5 text-primary" />
+                    <span>Professional Certificates</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <HomeIcon className="h-5 w-5 text-primary" />
+                    <span>Title Deeds & Land Titles</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Landmark className="h-5 w-5 text-primary" />
+                    <span>Bank & Financial Docs</span>
+                  </li>
+                </ul>
+              </div>
+              <Image
+                src="https://placehold.co/600x400.png"
+                width="550"
+                height="310"
+                alt="Verified Document"
+                data-ai-hint="document verification"
+                className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last"
+              />
+            </div>
+            <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 md:gap-12 mt-12">
+                <div className="grid gap-4">
+                    <div className="flex items-center gap-3">
+                        <User className="h-8 w-8 text-primary"/>
+                        <h4 className="text-xl font-bold">For Individuals</h4>
+                    </div>
+                    <p className="text-muted-foreground">
+                        Securely digitize and verify your personal documents. Share a tamper-proof version with banks, employers, or government agencies with a single click.
+                    </p>
+                </div>
+                <div className="grid gap-4">
+                    <div className="flex items-center gap-3">
+                        <Building className="h-8 w-8 text-primary"/>
+                        <h4 className="text-xl font-bold">For Enterprises</h4>
+                    </div>
+                    <p className="text-muted-foreground">
+                        Integrate our API to automate your document verification workflow. Reduce fraud, cut operational costs, and onboard customers faster with a system you can trust.
+                    </p>
+                </div>
+            </div>
+          </div>
+        </section>
 
         {/* CTA Section */}
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-card">
+        <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
             <div className="space-y-3">
               <h2 className="text-3xl font-bold tracking-tighter md:text-4xl font-headline">Join Ethiopia's Digital Transformation</h2>
