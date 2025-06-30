@@ -1,7 +1,11 @@
+'use client';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Activity, ShieldAlert, CheckCircle2, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { Activity, ShieldAlert, CheckCircle2, Users, ThumbsUp, ThumbsDown, UserSearch } from "lucide-react";
 
 const stats = [
     { title: "Total Verifications", value: "12,405", icon: Activity, color: "text-blue-500" },
@@ -18,7 +22,22 @@ const recentVerifications = [
     { id: "REQ-005", user: "Dawit A.", type: "Passport", status: "Approved", date: "2024-07-20" },
 ]
 
+const manualReviewRequests = [
+    { id: "DOC-098", user: "Lemlem H.", title: "Property Title Deed", date: "2024-07-23" },
+    { id: "DOC-095", user: "Samuel G.", title: "Professional License", date: "2024-07-22" },
+    { id: "DOC-091", user: "Fenet A.", title: "Birth Certificate", date: "2024-07-22" },
+];
+
 export default function AdminPage() {
+    const { toast } = useToast();
+
+    const handleReviewAction = (action: 'Approved' | 'Rejected', docId: string) => {
+        toast({
+            title: `Document ${action}`,
+            description: `Document ${docId} has been manually ${action.toLowerCase()}. The user will be notified.`,
+        });
+    };
+
     return (
         <div className="space-y-8">
             <h1 className="text-3xl font-bold font-headline">Admin Panel</h1>
@@ -77,6 +96,47 @@ export default function AdminPage() {
                                         </Badge>
                                     </TableCell>
                                     <TableCell>{req.date}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
+
+             <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <UserSearch className="h-5 w-5" />
+                        Manual Verification Queue (DARS)
+                    </CardTitle>
+                    <CardDescription>Documents flagged by the AI for manual review by the DARS team.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Document ID</TableHead>
+                                <TableHead>User</TableHead>
+                                <TableHead>Document Title</TableHead>
+                                <TableHead>Date</TableHead>
+                                <TableHead className="text-right">Actions</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {manualReviewRequests.map((req) => (
+                                <TableRow key={req.id}>
+                                    <TableCell className="font-medium">{req.id}</TableCell>
+                                    <TableCell>{req.user}</TableCell>
+                                    <TableCell>{req.title}</TableCell>
+                                    <TableCell>{req.date}</TableCell>
+                                    <TableCell className="text-right space-x-2">
+                                        <Button size="sm" variant="outline" className="border-accent text-accent-foreground hover:bg-accent/10" onClick={() => handleReviewAction('Approved', req.id)}>
+                                            <ThumbsUp className="mr-2 h-4 w-4" /> Approve
+                                        </Button>
+                                        <Button size="sm" variant="destructive" onClick={() => handleReviewAction('Rejected', req.id)}>
+                                            <ThumbsDown className="mr-2 h-4 w-4" /> Reject
+                                        </Button>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

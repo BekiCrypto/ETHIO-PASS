@@ -4,7 +4,7 @@ import { useState, useRef, ChangeEvent } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Search, MoreHorizontal, FileText, Briefcase, MoreVertical, User, Upload, CheckCircle, AlertCircle, Loader2, FilePlus2 } from "lucide-react";
+import { Search, MoreHorizontal, FileText, Briefcase, MoreVertical, User, Upload, CheckCircle, AlertCircle, Loader2, FilePlus2, PencilRuler } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,6 +33,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { verifyDocumentAuthenticity } from './actions';
 import Image from 'next/image';
+import type { DocumentAuthenticityCheckOutput } from '@/ai/flows/document-authenticity-check';
 
 const issuedDocFilters = [
     { name: 'All Documents', icon: FileText },
@@ -48,9 +49,22 @@ const issuedDocuments = [
 
 const docTypes = ['Personal', 'Professional', 'Legal', 'Property', 'Financial', 'Other'];
 
+type VerificationStatus = 'Verified' | 'Unverified' | 'Needs Review';
+
+interface UploadedDocument {
+  id: number;
+  title: string;
+  type: string;
+  dataUri: string;
+  verification: DocumentAuthenticityCheckOutput;
+  date: string;
+  status: VerificationStatus;
+}
+
+
 export default function DocumentsPage() {
   const [activeFilter, setActiveFilter] = useState('All Documents');
-  const [uploadedDocuments, setUploadedDocuments] = useState<any[]>([]);
+  const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [currentFile, setCurrentFile] = useState<{ file: File, dataUri: string } | null>(null);
@@ -92,17 +106,32 @@ export default function DocumentsPage() {
             documentType: newDocInfo.type,
         });
 
-        const newDocument = {
+        let status: VerificationStatus;
+        let toastDescription: string;
+
+        if (result.isAuthentic) {
+            status = 'Verified';
+            toastDescription = `Document '${newDocInfo.title}' has been successfully verified.`;
+        } else if (result.confidence > 0.4) { // Threshold for needing human review
+            status = 'Needs Review';
+            toastDescription = `Our AI could not confirm authenticity. Your document has been sent for manual review by DARS.`;
+        } else {
+            status = 'Unverified';
+            toastDescription = `Our AI has flagged this document as potentially unauthentic.`;
+        }
+
+        const newDocument: UploadedDocument = {
             id: Date.now(),
             title: newDocInfo.title,
             type: newDocInfo.type,
             dataUri: currentFile.dataUri,
             verification: result,
             date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
+            status: status,
         };
 
         setUploadedDocuments(prev => [newDocument, ...prev]);
-        toast({ title: "Verification Complete", description: `Document '${newDocInfo.title}' has been analyzed.` });
+        toast({ title: "Verification Complete", description: toastDescription });
     } catch (error) {
         toast({ title: "Verification Failed", description: "Could not verify the document. Please try again.", variant: "destructive" });
     } finally {
@@ -115,6 +144,18 @@ export default function DocumentsPage() {
   };
 
   const filteredIssuedDocuments = issuedDocuments.filter(doc => activeFilter === 'All Documents' || doc.type === activeFilter);
+
+  const getStatusBadge = (status: VerificationStatus) => {
+    switch (status) {
+      case 'Verified':
+        return <Badge variant="default" className="bg-accent text-accent-foreground whitespace-nowrap"><CheckCircle className="mr-1 h-3 w-3" /> Verified</Badge>;
+      case 'Needs Review':
+        return <Badge variant="secondary" className="whitespace-nowrap"><PencilRuler className="mr-1 h-3 w-3" /> Needs Review</Badge>;
+      case 'Unverified':
+      default:
+        return <Badge variant="destructive"><AlertCircle className="mr-1 h-3 w-3" /> Unverified</Badge>;
+    }
+  };
 
   const EmptyUploadedState = () => (
     <div className="flex flex-col items-center justify-center text-center py-20 space-y-4">
@@ -227,11 +268,7 @@ export default function DocumentsPage() {
                             <CardHeader>
                                <div className="flex items-start justify-between">
                                   <CardTitle className="text-base font-bold pr-2">{doc.title}</CardTitle>
-                                  {doc.verification.isAuthentic ? (
-                                    <Badge variant="default" className="bg-accent text-accent-foreground whitespace-nowrap"><CheckCircle className="mr-1 h-3 w-3" /> Verified</Badge>
-                                  ) : (
-                                    <Badge variant="destructive"><AlertCircle className="mr-1 h-3 w-3" /> Unverified</Badge>
-                                  )}
+                                  {getStatusBadge(doc.status)}
                                </div>
                             </CardHeader>
                             <CardContent className="flex-grow flex flex-col justify-between">
