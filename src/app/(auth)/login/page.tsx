@@ -14,7 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
+  const [emailOrPhone, setEmailOrPhone] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const auth = getAuth(app);
@@ -25,24 +25,43 @@ export default function LoginPage() {
     event.preventDefault();
     setIsLoading(true);
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log("Successfully logged in:", user);
-        router.push('/dashboard');
-      })
-      .catch((error) => {
-        console.error("Error logging in:", error);
-        toast({
-          title: "Login Failed",
-          description: "Please check your email and password.",
-          variant: "destructive"
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailOrPhone);
+    const isPhone = /^(\+2519|09)\d{8}$/.test(emailOrPhone);
+
+    if (isEmail) {
+      signInWithEmailAndPassword(auth, emailOrPhone, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log("Successfully logged in:", user);
+          router.push('/dashboard');
         })
-      })
-      .finally(() => {
+        .catch((error) => {
+          console.error("Error logging in:", error);
+          toast({
+            title: "Login Failed",
+            description: "Please check your email and password.",
+            variant: "destructive"
+          })
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } else if (isPhone) {
+        toast({
+            title: "Phone Login Not Supported",
+            description: "Password login with a phone number is not yet available. Please use your email address.",
+            variant: "destructive"
+        });
         setIsLoading(false);
-      });
+    } else {
+        toast({
+            title: "Invalid Input",
+            description: "Please enter a valid email address.",
+            variant: "destructive"
+        });
+        setIsLoading(false);
+    }
   };
 
   return (
@@ -51,21 +70,21 @@ export default function LoginPage() {
         <EthioPassLogo />
         <CardTitle className="text-2xl mt-4">Login</CardTitle>
         <CardDescription>
-          Enter your email below to login to your account
+          Enter your email or phone number to login
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleLogin}>
           <div className="grid gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email-or-phone">Email or Phone Number</Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
+                id="email-or-phone"
+                type="text"
+                placeholder="m@example.com or 0912345678"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={emailOrPhone}
+                onChange={(e) => setEmailOrPhone(e.target.value)}
                 disabled={isLoading}
               />
             </div>
