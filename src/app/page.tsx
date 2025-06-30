@@ -306,11 +306,10 @@ export default function Home() {
                 </ul>
               </div>
               <Image
-                src="https://placehold.co/550x310.png"
+                src="/verified-document.png"
                 width="550"
                 height="310"
-                alt="Verified Document"
-                data-ai-hint="digital seal"
+                alt="A person interacting with a holographic digital document on a tablet, showing a verification seal."
                 className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last"
               />
             </div>
