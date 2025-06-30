@@ -1,0 +1,39 @@
+# See https://docs.docker.com/engine/reference/builder/#dockerignore-file
+
+# Git files
+.git
+.gitignore
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# Node.js dependencies and logs
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Next.js build artifacts
+.next
+dist
+build
+
+# Local environment variables
+# These should be configured on the deployment server, not included in the image
+.env
+.env*.local
+
+# Platform-specific configurations
+.vercel
+.netlify
+apphosting.yaml
+
+# Editor-specific files
+.vscode
+.idea
+
+# macOS specific files
+.DS_Store
+
+# Windows specific files
+Thumbs.db
