@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/ui/checkbox";
 import { EthioPassLogo } from "@/components/aman-logo"
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { app } from "@/firebase";
@@ -20,6 +21,7 @@ export default function RegistrationPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [agreed, setAgreed] = useState(false);
   const auth = getAuth(app);
   const router = useRouter();
   const { toast } = useToast();
@@ -27,6 +29,16 @@ export default function RegistrationPage() {
   const handleSignUp = (event: React.FormEvent) => {
     event.preventDefault();
     setIsLoading(true);
+    
+    if (!agreed) {
+        toast({
+            title: "Agreement Required",
+            description: "You must agree to the Terms of Service and Privacy Policy.",
+            variant: "destructive"
+        });
+        setIsLoading(false);
+        return;
+    }
 
     const phoneRegex = /^(\+2519|09)\d{8}$/;
     if (!phoneRegex.test(phoneNumber)) {
@@ -128,7 +140,13 @@ export default function RegistrationPage() {
                 disabled={isLoading}
               />
             </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+             <div className="flex items-center space-x-2">
+              <Checkbox id="terms" onCheckedChange={(checked) => setAgreed(Boolean(checked))} />
+              <Label htmlFor="terms" className="text-sm font-normal text-muted-foreground">
+                  I agree to the <Link href="/terms" target="_blank" className="underline text-foreground hover:text-primary">Terms of Service</Link> and <Link href="/privacy" target="_blank" className="underline text-foreground hover:text-primary">Privacy Policy</Link>.
+              </Label>
+            </div>
+            <Button type="submit" className="w-full" disabled={isLoading || !agreed}>
               {isLoading ? <Loader2 className="animate-spin" /> : 'Create an account'}
             </Button>
           </div>
